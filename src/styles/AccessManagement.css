@@ -1,0 +1,25 @@
+.status-active {
+  color: green;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.status-revoked {
+  color: red;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.revoke-button {
+  padding: 6px 12px;
+  background-color: crimson;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.revoke-button:disabled {
+  background-color: grey;
+  cursor: not-allowed;
+}

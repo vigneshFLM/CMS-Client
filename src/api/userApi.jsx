@@ -1,0 +1,11 @@
+import api from "../services/api";
+
+const userApi = {
+  fetchAll: () => api.get("/users"),
+  fetchManagers: () => api.get("/users/admins"),
+  register: (data) => api.post("/auth/register", data),
+  update: (id, data) => api.put(`/users/update/${id}`, data),
+  delete: (id) => api.delete(`/users/delete/${id}`),
+};
+
+export default userApi;

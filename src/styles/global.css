@@ -1,0 +1,210 @@
+@import "./Overlay.css";
+
+/* ---------- Global Styles ---------- */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* ---------- Filters ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filters select,
+.filters input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  min-width: 160px;
+  background-color: #fff;
+}
+
+/* ---------- Search Input ---------- */
+.search-input {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- Table ---------- */
+.table-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(52, 46, 46, 0.08);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+}
+
+.table th,
+.table td {
+  border: 1px solid #e0e0e0;
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.table thead {
+  background-color: #f4f6f8;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* ---------- Error Message ---------- */
+.error-message {
+  color: red;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+/* ---------- Pagination ---------- */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.pagination .active-page {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+/* ---------- Action Buttons ---------- */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.action-button {
+  background-color: rgba(0, 0, 0, 0.04); /* subtle gray by default */
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.action-button:hover {
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.08); /* slightly darker on hover */
+}
+
+/* Approve */
+.action-button.approve-icon {
+  background-color: #2e7d32;
+  color: white;
+}
+
+.action-button.approve-icon:hover {
+  background-color: #1b5e20;
+}
+
+/* Reject */
+.action-button.reject-icon {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.action-button.reject-icon:hover {
+  background-color: #b71c1c;
+}
+
+/* View */
+.action-button.view-icon {
+  color: #1976d2;
+}
+
+.action-button.view-icon:hover {
+  color: #0d47a1;
+}
+
+/* Edit */
+.action-button.edit-icon {
+  color: #ff9800;
+}
+
+.action-button.edit-icon:hover {
+  color: #ef6c00;
+}
+
+/* Delete */
+.action-button.delete-icon {
+  color: #f44336;
+}
+
+.action-button.delete-icon:hover {
+  color: #c62828;
+}
+
+/* ---------- Utility Buttons ---------- */
+.add-button,
+.reset-button {
+  padding: 10px 16px;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.add-button {
+  background-color: #1976d2;
+}
+
+.add-button:hover {
+  background-color: #1565c0;
+}
+
+.reset-button {
+  background-color: #f44336;
+}
+
+.reset-button:hover {
+  background-color: #d32f2f;
+}
+
+/* ---------- Copy Icon ---------- */
+.copy-icon {
+  background: none;
+  border: none;
+  margin-left: 8px;
+  cursor: pointer;
+  vertical-align: middle;
+}

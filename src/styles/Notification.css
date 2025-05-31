@@ -1,0 +1,49 @@
+/* Notification Container */
+.notification {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  min-width: 280px;
+  max-width: 360px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  font-size: 16px;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 1;
+}
+
+/* Soft Notification Types */
+.notification.success {
+  background-color: #64b5f6; /* soft sky blue */
+  color: #0d47a1;
+}
+
+.notification.error {
+  background-color: #ef9a9a; /* blush red */
+  color: #b71c1c;
+}
+
+.notification.info {
+  background-color: #a5d6a7; /* soft green */
+  color: #1b5e20;
+}
+
+.notification.warning {
+  background-color: #ffe082; /* pastel yellow */
+  color: #5d4037;
+}
+
+.notification-icon {
+  display: flex;
+  align-items: center;
+}
+
+.notification-message {
+  flex: 1;
+}

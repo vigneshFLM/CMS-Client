@@ -1,0 +1,99 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.signUp-form {
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.signUpForm-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.signUp-form h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.signUp-form label {
+  font-weight: 500;
+  margin: 10px 0 5px;
+  display: block;
+}
+
+.signUp-form input,
+.signUp-form select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-family: inherit;
+  margin-bottom: 10px;
+}
+
+.signUp-form select {
+  background-color: white;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.signUp-form select:focus,
+.signUp-form input:focus {
+  outline: none;
+  border-color: #2492fc;
+  box-shadow: 0 0 3px rgba(36, 146, 252, 0.5);
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.signUp-btn {
+  background-color: #2492fc;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  width: max-content;
+  margin-top: 10px;
+}
+
+.signUp-btn:hover {
+  background-color: #1e80e0;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #2492fc;
+  text-decoration: none;
+}

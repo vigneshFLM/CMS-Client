@@ -1,0 +1,19 @@
+/* Reason textarea */
+.add-form-floating textarea {
+  width: 96%;
+  resize: vertical;
+  min-height: 100px;
+  max-height: 250px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  transition: border-color 0.2s;
+}
+
+.add-form-floating textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}

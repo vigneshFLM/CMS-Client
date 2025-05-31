@@ -1,0 +1,89 @@
+.profile-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.profile-container h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.profile-value {
+  color: #222;
+  text-align: left;
+  max-width: 60%;
+  word-break: break-word;
+}
+
+.change-password-button {
+  margin-top: 20px;
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.change-password-button:hover {
+  background-color: #0056b3;
+}
+
+.change-password-form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  padding-top: 1rem;
+}
+
+.change-password-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding: 0.5rem 2.5rem 0.5rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.notification {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #e6f4ea;
+  color: #2d7a46;
+  border-left: 6px solid #28a745;
+  border-radius: 4px;
+}
