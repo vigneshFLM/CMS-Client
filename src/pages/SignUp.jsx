@@ -100,7 +100,7 @@ const SignUp = () => {
             <select name="role" value={form.role} onChange={handleChange}>
               <option value="user">User</option>
               <option value="admin">Admin</option>
-              <option value="superadmin">Super Admin</option>
+              <option value="super-admin">Super Admin</option>
             </select>
 
             <label>Manager</label>
