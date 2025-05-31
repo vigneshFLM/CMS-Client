@@ -1,7 +1,7 @@
 // src/components/Auth/AuthLayout.jsx
 import React from "react";
 import "../../styles/Login.css";
-import "../../styles/signUp.css";
+import "../../styles/SignUp.css";
 
 const AuthLayout = ({ children, image }) => (
   <div className="login-page">
