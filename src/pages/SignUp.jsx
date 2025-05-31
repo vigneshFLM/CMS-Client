@@ -108,9 +108,9 @@ const SignUp = () => {
               name="manager_id"
               value={form.manager_id}
               onChange={handleChange}
-              required
             >
               <option value="">Select Manager</option>
+              <option value="None">None</option>
               {managers.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name} {m.designation ? `(${m.designation})` : ""}
