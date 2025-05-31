@@ -38,8 +38,14 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const payload = {
+      ...form,
+      manager_id: form.manager_id ? Number(form.manager_id) : null,
+    };
+
     try {
-      await authAPI.register(form);
+      await authAPI.register(payload);
       showNotification("User registered successfully!", "success");
     } catch (err) {
       showNotification(err.response?.data?.error || "Sign Up failed", "error");
