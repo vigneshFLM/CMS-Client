@@ -13,7 +13,7 @@ const RequestView = ({ show, data, onClose }) => {
 
         <div className="form-group">
           <label className="form-label"><strong>Requested By:</strong></label>
-          <div className="form-value">{data.requested_by || "N/A"}</div>
+          <div className="form-value">{data.username || "N/A"}</div>
         </div>
 
         <div className="form-group">
