@@ -30,7 +30,7 @@ const Login = () => {
   return (
     <AuthLayout image="/login.png">
       <form onSubmit={handleSubmit} className="login-form">
-        <h2>Welcome!</h2>
+        <h2>Welcome 123!</h2>
         <label>Email</label>
         <input
           type="email"
