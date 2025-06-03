@@ -25,62 +25,105 @@ ChartJS.register(
 );
 
 const UserCharts = ({ stats }) => {
+  const totalCredentials = stats.myCredentials.length;
+  const active = stats.myCredentials.filter(
+    (c) => c.status === "active"
+  ).length;
+  const revoked = stats.myCredentials.filter(
+    (c) => c.status === "revoked"
+  ).length;
+
+  const approved = stats.requestCounts.approved || 0;
+  const rejected = stats.requestCounts.rejected || 0;
+  const pending = stats.requestCounts.pending || 0;
+
   const StatCard = ({ title, value, color = "#6f42c1" }) => (
-    <div className="stat-card" style={{ borderColor: color, color: color }}>
+    <div className="stat-card" style={{ borderColor: color, color }}>
       <div>{title}</div>
       <div className="stat-value">{value}</div>
     </div>
   );
 
   return (
-    <>
+    <div className="stats-container">
       <div className="stat-cards">
-        <StatCard title="Your Credentials" value={stats.total} />
-        <StatCard title="Verified" value={stats.verified} color="#28a745" />
-        <StatCard title="Unverified" value={stats.unverified} color="#ffc107" />
+        <StatCard title="Total Credentials" value={totalCredentials} />
+        <StatCard title="Active Credentials" value={active} color="#28a745" />
+        <StatCard title="Revoked Credentials" value={revoked} color="#dc3545" />
+        {/* <StatCard title="Approved Requests" value={approved} color="#007bff" />
+        <StatCard title="Rejected Requests" value={rejected} color="#ffc107" /> */}
+        <StatCard title="Pending Requests" value={pending} color="#6c757d" />
       </div>
 
       <div className="chart-wrapper">
         <div className="chart-box">
           <Bar
             data={{
-              labels: ["Verified", "Unverified"],
+              labels: ["Active", "Revoked"],
               datasets: [
                 {
-                  label: "Status",
-                  data: [stats.verified, stats.unverified],
-                  backgroundColor: ["#28a745", "#ffc107"],
+                  label: "Credentials",
+                  data: [active, revoked],
+                  backgroundColor: ["#5b9bd5", "#f6b26b"],
+                  borderRadius: 8,
                 },
               ],
             }}
             options={{
+              responsive: true,
+              maintainAspectRatio: false,
               plugins: {
-                title: { display: true, text: "📄 Verification Overview" },
+                title: {
+                  display: true,
+                  text: "Credential Summary",
+                  font: { size: 18 },
+                  padding: { top: 10, bottom: 20 },
+                },
                 legend: { display: false },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: { stepSize: 1 },
+                },
               },
             }}
           />
         </div>
+
         <div className="chart-box">
           <Doughnut
             data={{
-              labels: ["Verified", "Unverified"],
+              labels: ["Approved", "Rejected", "Pending"],
               datasets: [
                 {
-                  data: [stats.verified, stats.unverified],
-                  backgroundColor: ["#28a745", "#ffc107"],
+                  data: [approved, rejected, pending],
+                  backgroundColor: ["#ffdd57", "#77dd77", "#5b9bd5"],
+                  borderWidth: 2,
                 },
               ],
             }}
             options={{
+              responsive: true,
               plugins: {
-                title: { display: true, text: "✅ Credential Status" },
+                title: {
+                  display: true,
+                  text: "Request Status Distribution",
+                  font: { size: 16 },
+                },
+                legend: {
+                  position: "bottom",
+                  labels: {
+                    boxWidth: 20,
+                    font: { weight: "600" },
+                  },
+                },
               },
             }}
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -4,7 +4,7 @@ const ApprovalsFilters = ({ search, setSearch, statusFilter, setStatusFilter }) 
   <div className="filters">
     <input
       type="text"
-      placeholder="Search by reason..."
+      placeholder="Search by reason, name, or credential..."
       value={search}
       onChange={(e) => setSearch(e.target.value)}
       className="search-input"

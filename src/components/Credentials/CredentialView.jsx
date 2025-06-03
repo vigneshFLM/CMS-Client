@@ -19,12 +19,16 @@ const CredentialView = ({
         <h3 className="form-title">Credential Details</h3>
 
         <div className="form-group">
-          <label className="form-label"><strong>Name:</strong></label>
+          <label className="form-label">
+            <strong>Name:</strong>
+          </label>
           <div className="form-value">{data.name}</div>
         </div>
 
         <div className="form-group">
-          <label className="form-label"><strong>Username:</strong></label>
+          <label className="form-label">
+            <strong>Username:</strong>
+          </label>
           <div className="input-with-actions">
             <span className="form-value">{data.username}</span>
             <button
@@ -45,10 +49,12 @@ const CredentialView = ({
         </div>
 
         <div className="form-group">
-          <label className="form-label"><strong>Password:</strong></label>
+          <label className="form-label">
+            <strong>Password:</strong>
+          </label>
           <div className="input-with-actions">
             <span className="form-value">
-              {data.password}
+              {showPassword ? data.password : "*".repeat(data.password.length)}
             </span>
             <button
               type="button"

@@ -69,7 +69,7 @@ const SuperAdminCharts = ({ stats }) => {
               plugins: {
                 title: {
                   display: true,
-                  text: "👥 User & Credential Summary",
+                  text: "User & Credential Summary",
                   position: "top", // default
                   align: "center", // center horizontally
                   padding: {
@@ -100,7 +100,7 @@ const SuperAdminCharts = ({ stats }) => {
               datasets: [
                 {
                   data: [stats.activeAccess, stats.revokedAccess],
-                  backgroundColor: ["#77dd77", "#ff6961"],
+                  backgroundColor: ["#77dd77", "#ffdd57"],
                   borderWidth: 2,
                 },
               ],
@@ -110,7 +110,7 @@ const SuperAdminCharts = ({ stats }) => {
               plugins: {
                 title: {
                   display: true,
-                  text: "🔐 Access Distribution",
+                  text: "Access Distribution",
                   font: { size: 16 },
                 },
                 legend: {

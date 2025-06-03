@@ -43,7 +43,12 @@ const ApprovalsRequests = () => {
     let list = [...requests];
     if (search.trim()) {
       const term = search.toLowerCase();
-      list = list.filter((r) => r.reason.toLowerCase().includes(term));
+      list = list.filter(
+        (r) =>
+          r.reason?.toLowerCase().includes(term) ||
+          r.user_name?.toLowerCase().includes(term) ||
+          r.credential_name?.toLowerCase().includes(term)
+      );
     }
     if (statusFilter) {
       list = list.filter((r) => r.status === statusFilter);
@@ -60,9 +65,13 @@ const ApprovalsRequests = () => {
       await RequestsAPI.updateStatus(id, status);
       showNotification(`Request ${status}`, "success");
       const updated = await RequestsAPI.getAll();
-      setRequests(updated.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+      setRequests(
+        updated.data.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        )
+      );
     } catch (err) {
-      showNotification(err.response?.data?.error || "Update failed", "error");
+      showNotification("Update failed", "error");
     }
   };
 

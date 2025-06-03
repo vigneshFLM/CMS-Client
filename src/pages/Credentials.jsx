@@ -41,7 +41,7 @@ const Credentials = () => {
       setCredentials(res.data);
       setFiltered(res.data);
     } catch (err) {
-      showNotification(err.response?.data?.error || "Failed to fetch credentials", "error");
+      showNotification("Failed to fetch credentials", "error");
     }
   };
 
@@ -57,12 +57,14 @@ const Credentials = () => {
     let list = [...credentials];
     if (search.trim()) {
       const term = search.toLowerCase();
-      list = list.filter(c =>
-        (c.name?.toLowerCase().includes(term) || c.username?.toLowerCase().includes(term))
+      list = list.filter(
+        (c) =>
+          c.name?.toLowerCase().includes(term) ||
+          c.username?.toLowerCase().includes(term)
       );
     }
     if (creatorFilter) {
-      list = list.filter(c => c.created_by.toString() === creatorFilter);
+      list = list.filter((c) => c.created_by?.toString() === creatorFilter);
     }
     setFiltered(list);
     setCurrentPage(1);
@@ -76,25 +78,30 @@ const Credentials = () => {
   const handleAddCredential = async () => {
     try {
       const res = await CredentialAPI.add(credentialData);
-      setCredentials(prev => [res.data, ...prev]);
+      setCredentials((prev) => [res.data, ...prev]);
       setCredentialData({ name: "", username: "", password: "" });
       setShowForm(false);
       showNotification("Credential added successfully!", "success");
     } catch (err) {
-      showNotification(err.response?.data?.error || "Failed to add credential", "error");
+      showNotification("Failed to add credential", "error");
     }
   };
 
-  const handleEdit = (cred) => {
-    console.log("Editing credential:", cred);
-    setEditMode(true);
-    setEditId(cred.credential_id);
-    setCredentialData({
-      name: cred.name,
-      username: cred.username,
-      password: "",
-    });
-    setShowForm(true);
+  const handleEdit = async (cred) => {
+    try {
+      const res = await CredentialAPI.viewById(cred.credential_id);
+      const fullData = res.data;
+      setEditMode(true);
+      setEditId(cred.credential_id);
+      setCredentialData({
+        name: fullData.name,
+        username: fullData.username,
+        password: fullData.password, // fetched password
+      });
+      setShowForm(true);
+    } catch (error) {
+      showNotification("Failed to fetch full credential", "error");
+    }
   };
 
   const handleUpdateCredential = async () => {
@@ -106,7 +113,7 @@ const Credentials = () => {
       setCredentialData({ name: "", username: "", password: "" });
       showNotification("Credential updated successfully!", "success");
     } catch (err) {
-      showNotification(err.response?.data?.error || "Update failed", "error");
+      showNotification("Update failed", "error");
     }
   };
 
@@ -123,10 +130,10 @@ const Credentials = () => {
   const handleDeleteCredential = async (id) => {
     try {
       await CredentialAPI.delete(id);
-      setCredentials(prev => prev.filter(c => c.credential_id !== id));
+      setCredentials((prev) => prev.filter((c) => c.credential_id !== id));
       showNotification("Credential deleted successfully!", "success");
     } catch (err) {
-      showNotification(err.response?.data?.error || "Delete failed", "error");
+      showNotification("Delete failed", "error");
     }
   };
 
@@ -134,13 +141,20 @@ const Credentials = () => {
   const indexOfFirst = indexOfLast - credentialsPerPage;
   const currentCredentials = filtered.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filtered.length / credentialsPerPage);
-  const uniqueCreators = [...new Set(credentials.map(c => c.created_by).filter(Boolean))];
+  const uniqueCreators = Array.from(
+    new Map(
+      credentials
+        .filter((c) => c.created_by && c.created_by_name)
+        .map((c) => [c.created_by, c.created_by_name])
+    )
+  ).map(([id, name]) => ({ id, name }));
 
   return (
     <div className="credential-container">
       <CredentialFilters
         search={search}
         setSearch={setSearch}
+        userRole={user.role}
         creatorFilter={creatorFilter}
         setCreatorFilter={setCreatorFilter}
         resetFilters={resetFilters}

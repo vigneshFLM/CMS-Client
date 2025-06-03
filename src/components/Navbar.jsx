@@ -6,11 +6,13 @@ import {
 } from "@tabler/icons-react";
 import "../styles/Navbar.css";
 import { useAuth } from "../context/AuthContext";
+import { useNotification } from "../context/NotificationContext";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { user } = useAuth();
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -23,6 +25,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
+    showNotification("Logging out!", "success");
     localStorage.removeItem("token");
     window.location.href = "/login";
   };

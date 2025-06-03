@@ -23,7 +23,7 @@ const Login = () => {
       showNotification("Login successful!", "success");
       navigate("/dashboard");
     } catch (err) {
-      showNotification(err.response?.data?.error || "Login failed", "error");
+      showNotification("Login failed", "error");
     }
   };
 
@@ -46,7 +46,9 @@ const Login = () => {
           showPassword={showPassword}
           toggle={() => setShowPassword(!showPassword)}
         />
-        <button type="submit" className="login-btn">Login</button>
+        <button type="submit" className="login-btn">
+          Login
+        </button>
         <p className="signup-link">
           Don’t have an account? <Link to="/signup">Sign Up</Link>
         </p>

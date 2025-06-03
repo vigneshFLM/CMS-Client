@@ -3,6 +3,9 @@ import {
   IconClockHour4,
   IconLockCheck,
   IconLockX,
+  IconEye,
+  IconEdit,
+  IconTrash,
 } from "@tabler/icons-react";
 
 const renderStatusIcon = (status) => {
@@ -11,7 +14,13 @@ const renderStatusIcon = (status) => {
   return <IconClockHour4 size={16} color="#f9a825" />;
 };
 
-const RequestTable = ({ currentRequests, indexOfFirst }) => (
+const RequestTable = ({
+  currentRequests,
+  indexOfFirst,
+  onEdit,
+  onView,
+  onDelete,
+}) => (
   <div className="table-wrapper">
     <table className="table">
       <thead>
@@ -22,6 +31,7 @@ const RequestTable = ({ currentRequests, indexOfFirst }) => (
           <th>Status</th>
           <th>Reviewer</th>
           <th>Created At</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -31,12 +41,38 @@ const RequestTable = ({ currentRequests, indexOfFirst }) => (
             <td>{req.credential_name}</td>
             <td>{req.reason}</td>
             <td>
-              <span className={`status-tag ${req.status}`}>
-                {req.status}
-              </span>
+              <span className={`status-tag ${req.status}`}>{req.status}</span>
             </td>
             <td>{req.reviewer_name || "-"}</td>
             <td>{new Date(req.created_at).toLocaleString()}</td>
+            <td className="action-buttons">
+              <button
+                className="action-button view-button"
+                onClick={() => onView(req.id)}
+                title="View"
+              >
+                <IconEye size={18} />
+              </button>
+
+              {req.status === "pending" && (
+                <>
+                  <button
+                    className="action-button edit-icon"
+                    onClick={() => onEdit(req.id)}
+                    title="Edit"
+                  >
+                    <IconEdit size={18} />
+                  </button>
+                  <button
+                    className="action-button delete-icon"
+                    onClick={() => onDelete(req.id)}
+                    title="Delete"
+                  >
+                    <IconTrash size={18} color="#d32f2f" />
+                  </button>
+                </>
+              )}
+            </td>
           </tr>
         ))}
       </tbody>

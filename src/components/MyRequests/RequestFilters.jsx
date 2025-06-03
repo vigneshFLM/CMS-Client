@@ -5,7 +5,7 @@ const RequestFilters = ({ search, setSearch, statusFilter, setStatusFilter, onNe
     <div className="search-wrapper">
       <input
         type="text"
-        placeholder="Search by reason..."
+        placeholder="Search by credential, reason..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="search-input"

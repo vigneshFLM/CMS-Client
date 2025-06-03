@@ -2,6 +2,7 @@ const CredentialFilters = ({
   search,
   setSearch,
   creatorFilter,
+  userRole,
   setCreatorFilter,
   resetFilters,
   uniqueCreators,
@@ -22,9 +23,9 @@ const CredentialFilters = ({
       onChange={(e) => setCreatorFilter(e.target.value)}
     >
       <option value="">All Creators</option>
-      {uniqueCreators.map((id) => (
-        <option key={id} value={id}>
-          Creator ID: {id}
+      {uniqueCreators.map((creator) => (
+        <option key={creator.id} value={creator.id}>
+          {creator.name}
         </option>
       ))}
     </select>
@@ -33,9 +34,11 @@ const CredentialFilters = ({
       <button className="reset-button" onClick={resetFilters}>
         Reset Filters
       </button>
-      <button className="add-button" onClick={onAddClick}>
-        Add Credential
-      </button>
+      {(userRole === "admin" || userRole === "super-admin") && (
+        <button className="add-button" onClick={onAddClick}>
+          Add Credential
+        </button>
+      )}
     </div>
   </div>
 );

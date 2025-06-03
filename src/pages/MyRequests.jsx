@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import api from "../services/api";
+import requestApi from "../api/requestsApi";
 import { useNotification } from "../context/NotificationContext";
 import RequestFilters from "../components/MyRequests/RequestFilters";
 import RequestForm from "../components/MyRequests/RequestForm";
 import RequestTable from "../components/MyRequests/RequestTable";
+import RequestView from "../components/MyRequests/RequestView";
+import Pagination from "../components/Pagination";
 import { IconLoader2 } from "@tabler/icons-react";
 import "../styles/MyRequests.css";
-import Pagination from "../components/Pagination";
-
 
 const MyRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -17,6 +17,7 @@ const MyRequests = () => {
   const [loading, setLoading] = useState(true);
   const [credentialOptions, setCredentialOptions] = useState([]);
   const [showRequestForm, setShowRequestForm] = useState(false);
+  const [editingRequestId, setEditingRequestId] = useState(null);
   const [requestForm, setRequestForm] = useState({
     credential_id: "",
     reason: "",
@@ -24,13 +25,15 @@ const MyRequests = () => {
   const [submitting, setSubmitting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const requestsPerPage = 10;
+  const [showRequestView, setShowRequestView] = useState(false);
+  const [selectedRequestData, setSelectedRequestData] = useState(null);
 
   const { showNotification } = useNotification();
 
   const fetchRequests = async () => {
     setLoading(true);
     try {
-      const res = await api.get("/requests/my-requests");
+      const res = await requestApi.getMyRequests();
       const sorted = res.data.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
@@ -51,8 +54,9 @@ const MyRequests = () => {
     const term = search.toLowerCase();
     const list = requests.filter((r) => {
       const matchReason = r.reason.toLowerCase().includes(term);
+      const matchCredential = r.credential_name?.toLowerCase().includes(term);
       const matchStatus = !statusFilter || r.status === statusFilter;
-      return matchReason && matchStatus;
+      return (matchReason || matchCredential) && matchStatus;
     });
     setFiltered(list);
     setCurrentPage(1);
@@ -60,9 +64,10 @@ const MyRequests = () => {
 
   const handleNewRequest = async () => {
     try {
-      const res = await api.get("/credentials/names");
+      const res = await requestApi.getCredentialNames();
       setCredentialOptions(res.data);
       setRequestForm({ credential_id: "", reason: "" });
+      setEditingRequestId(null);
       setShowRequestForm(true);
     } catch {
       showNotification("Failed to load credentials", "error");
@@ -74,19 +79,58 @@ const MyRequests = () => {
       showNotification("Please fill in all fields", "error");
       return;
     }
+
     try {
       setSubmitting(true);
-      await api.post("/requests", requestForm);
-      showNotification("Request submitted successfully", "success");
+      if (editingRequestId) {
+        await requestApi.update(editingRequestId, requestForm);
+        showNotification("Request updated successfully", "success");
+      } else {
+        await requestApi.create(requestForm);
+        showNotification("Request submitted successfully", "success");
+      }
       setShowRequestForm(false);
       fetchRequests();
     } catch (err) {
-      showNotification(
-        err.response?.data?.error || "Failed to submit request",
-        "error"
-      );
+      showNotification("Failed to submit request", "error");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleRequestDelete = async (id) => {
+    try {
+      await requestApi.delete(id);
+      showNotification("Request deleted successfully", "success");
+      fetchRequests();
+    } catch {
+      showNotification("Failed to delete request", "error");
+    }
+  };
+
+  const handleRequestEdit = async (id) => {
+    try {
+      const res = await requestApi.getById(id);
+      const req = res.data;
+      setRequestForm({
+        credential_id: req.credential_id,
+        reason: req.reason,
+      });
+      setEditingRequestId(id);
+      setShowRequestForm(true);
+    } catch {
+      showNotification("Failed to fetch request for editing", "error");
+    }
+  };
+
+  const handleRequestView = async (id) => {
+    try {
+      const res = await requestApi.getById(id);
+      const req = res.data;
+      setSelectedRequestData(req);
+      setShowRequestView(true);
+    } catch {
+      showNotification("Failed to view request", "error");
     }
   };
 
@@ -103,6 +147,11 @@ const MyRequests = () => {
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
         onNewRequest={handleNewRequest}
+      />
+      <RequestView
+        show={showRequestView}
+        data={selectedRequestData}
+        onClose={() => setShowRequestView(false)}
       />
 
       {showRequestForm && (
@@ -122,12 +171,15 @@ const MyRequests = () => {
           <span>Loading your requests...</span>
         </div>
       ) : currentRequests.length === 0 ? (
-        <p className="no-data">No data.</p>
+        <p className="no-data">No requests found.</p>
       ) : (
         <>
           <RequestTable
             currentRequests={currentRequests}
             indexOfFirst={indexOfFirst}
+            onEdit={handleRequestEdit}
+            onView={handleRequestView}
+            onDelete={handleRequestDelete}
           />
           <Pagination
             totalPages={totalPages}

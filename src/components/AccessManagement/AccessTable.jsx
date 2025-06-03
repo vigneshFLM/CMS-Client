@@ -35,7 +35,7 @@ const AccessTable = ({ entries, onRevoke, revokingId, indexOfFirst }) => (
                   {revokingId === `${entry.user_id}-${entry.credential_id}` ? "Revoking..." : "Revoke"}
                 </button>
               ) : (
-                "-"
+                "Revoked"
               )}
             </td>
           </tr>

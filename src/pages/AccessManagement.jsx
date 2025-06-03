@@ -5,6 +5,7 @@ import AccessFilters from "../components/AccessManagement/AccessFilters";
 import AccessTable from "../components/AccessManagement/AccessTable";
 import Pagination from "../components/Pagination";
 import usePagination from "../hooks/usePagination";
+import { useNotification } from "../context/NotificationContext";
 
 const AccessManagement = () => {
   const [data, setData] = useState([]);
@@ -14,6 +15,7 @@ const AccessManagement = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [revokingId, setRevokingId] = useState(null);
+  const { showNotification } = useNotification();
 
   const rowsPerPage = 10;
 
@@ -72,8 +74,9 @@ const AccessManagement = () => {
           : entry
       );
       setData(updated);
+      showNotification("Credential Revoked!", "success");
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to revoke credential");
+      showNotification("Failed to revoke Credential!", "error");
     } finally {
       setRevokingId(null);
     }

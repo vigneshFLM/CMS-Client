@@ -48,7 +48,7 @@ const SignUp = () => {
       await authAPI.register(payload);
       showNotification("User registered successfully!", "success");
     } catch (err) {
-      showNotification(err.response?.data?.error || "Sign Up failed", "error");
+      showNotification("Sign Up failed", "error");
     }
   };
 

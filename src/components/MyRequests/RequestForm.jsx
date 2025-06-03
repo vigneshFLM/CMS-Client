@@ -6,27 +6,35 @@ const RequestForm = ({
   setRequestForm,
   submitting,
   onSubmit,
-  onCancel
+  onCancel,
 }) => (
   <div className="overlay">
     <div className="add-form-floating">
       <h3 className="overlay-title">Request Credential Access</h3>
       <select
         value={requestForm.credential_id}
-        onChange={(e) => setRequestForm({ ...requestForm, credential_id: e.target.value })}
+        onChange={(e) =>
+          setRequestForm({
+            ...requestForm,
+            credential_id: e.target.value === "" ? "" : Number(e.target.value),
+          })
+        }
       >
         <option value="">Select Credential</option>
         {credentialOptions.map((cred) => (
-          <option key={cred.credential_id} value={cred.credential_id}>
+          <option key={cred.id} value={cred.id}>
             {cred.name}
           </option>
         ))}
       </select>
+
       <textarea
         rows={4}
         placeholder="Reason for request"
         value={requestForm.reason}
-        onChange={(e) => setRequestForm({ ...requestForm, reason: e.target.value })}
+        onChange={(e) =>
+          setRequestForm({ ...requestForm, reason: e.target.value })
+        }
       />
       <div className="floating-buttons">
         <button disabled={submitting} onClick={onSubmit}>

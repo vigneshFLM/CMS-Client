@@ -101,15 +101,12 @@ const Users = () => {
 
   const handleAddUser = async () => {
     try {
-      await userApi.register(newUser);;
+      await userApi.register(newUser);
       resetForm();
       fetchData();
       showNotification("User added successfully!", "success");
     } catch (err) {
-      showNotification(
-        err.response?.data?.error || "Failed to add user",
-        "error"
-      );
+      showNotification("Failed to add user", "error");
     }
   };
 
@@ -120,10 +117,7 @@ const Users = () => {
       fetchData();
       showNotification("User updated successfully!", "success");
     } catch (err) {
-      showNotification(
-        err.response?.data?.error || "Failed to update user",
-        "error"
-      );
+      showNotification("Failed to update user", "error");
     }
   };
 
@@ -133,10 +127,7 @@ const Users = () => {
       setUsers((prev) => prev.filter((u) => u.id !== id));
       showNotification("User deleted successfully!", "success");
     } catch (err) {
-      showNotification(
-        err.response?.data?.error || "Failed to delete user",
-        "error"
-      );
+      showNotification("Failed to delete user", "error");
     }
   };
 
@@ -162,6 +153,7 @@ const Users = () => {
         roleFilter={roleFilter}
         setRoleFilter={setRoleFilter}
         managerFilter={managerFilter}
+        managers={managers}
         setManagerFilter={setManagerFilter}
         accessFilter={accessFilter}
         setAccessFilter={setAccessFilter}
