@@ -81,6 +81,7 @@ const Credentials = () => {
       setCredentials((prev) => [res.data, ...prev]);
       setCredentialData({ name: "", username: "", password: "" });
       setShowForm(false);
+      fetchCredentials();
       showNotification("Credential added successfully!", "success");
     } catch (err) {
       showNotification("Failed to add credential", "error");
