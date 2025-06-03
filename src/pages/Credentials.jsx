@@ -40,11 +40,8 @@ const Credentials = () => {
       const res = await CredentialAPI.fetchByUserId(user.id);
       setCredentials(res.data);
       setFiltered(res.data);
-      if(res.message) {
-        showNotification(res.message, "info");
-      }
     } catch (err) {
-      showNotification("Failed to fetch credentials", "error");
+      showNotification(res.message, "info");
     }
   };
 
