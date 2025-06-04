@@ -187,7 +187,10 @@ const Credentials = () => {
       <CredentialView
         show={showView}
         data={viewData}
-        onClose={() => setShowView(false)}
+        onClose={() => {
+          setShowView(false);
+          if (showViewPassword) setShowViewPassword(false);
+        }}
         showPassword={showViewPassword}
         togglePassword={() => setShowViewPassword(!showViewPassword)}
         copiedField={copiedField}
