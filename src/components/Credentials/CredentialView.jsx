@@ -38,9 +38,7 @@ const CredentialView = ({
             {data.username && (
               <button
                 type="button"
-                onClick={() =>
-                  handleCopy(username, setCopiedField, "username")
-                }
+                onClick={() => handleCopy(username, setCopiedField, "username")}
                 className="icon-button"
                 title="Copy Username"
               >
@@ -100,7 +98,14 @@ const CredentialView = ({
         </div>
 
         <div className="floating-buttons">
-          <button type="button" className="close-button" onClick={onClose}>
+          <button
+            type="button"
+            className="close-button"
+            onClick={() => {
+              if (showPassword) togglePassword();
+              onClose();
+            }}
+          >
             Close
           </button>
         </div>
