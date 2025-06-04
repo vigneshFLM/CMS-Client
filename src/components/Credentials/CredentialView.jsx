@@ -13,6 +13,10 @@ const CredentialView = ({
 }) => {
   if (!show || !data) return null;
 
+  const name = data.name || "N/A";
+  const username = data.username || "N/A";
+  const password = data.password || "";
+
   return (
     <div className="overlay">
       <form className="add-form-floating" onSubmit={(e) => e.preventDefault()}>
@@ -22,7 +26,7 @@ const CredentialView = ({
           <label className="form-label">
             <strong>Name:</strong>
           </label>
-          <div className="form-value">{data.name}</div>
+          <div className="form-value">{name}</div>
         </div>
 
         <div className="form-group">
@@ -30,21 +34,23 @@ const CredentialView = ({
             <strong>Username:</strong>
           </label>
           <div className="input-with-actions">
-            <span className="form-value">{data.username}</span>
-            <button
-              type="button"
-              onClick={() =>
-                handleCopy(data.username, setCopiedField, "username")
-              }
-              className="icon-button"
-              title="Copy Username"
-            >
-              {copiedField === "username" ? (
-                <IconCheck size={18} color="#1976d2" />
-              ) : (
-                <IconCopy size={18} color="#1976d2" />
-              )}
-            </button>
+            <span className="form-value">{username}</span>
+            {data.username && (
+              <button
+                type="button"
+                onClick={() =>
+                  handleCopy(username, setCopiedField, "username")
+                }
+                className="icon-button"
+                title="Copy Username"
+              >
+                {copiedField === "username" ? (
+                  <IconCheck size={18} color="#1976d2" />
+                ) : (
+                  <IconCopy size={18} color="#1976d2" />
+                )}
+              </button>
+            )}
           </div>
         </div>
 
@@ -54,34 +60,42 @@ const CredentialView = ({
           </label>
           <div className="input-with-actions">
             <span className="form-value">
-              {showPassword ? data.password : "*".repeat(data.password.length)}
+              {password
+                ? showPassword
+                  ? password
+                  : "*".repeat(password.length)
+                : "N/A"}
             </span>
-            <button
-              type="button"
-              onClick={togglePassword}
-              className="icon-button"
-              title={showPassword ? "Hide Password" : "Show Password"}
-            >
-              {showPassword ? (
-                <IconEyeOff size={18} color="#1976d2" />
-              ) : (
-                <IconEye size={18} color="#1976d2" />
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                handleCopy(data.password, setCopiedField, "password")
-              }
-              className="icon-button"
-              title="Copy Password"
-            >
-              {copiedField === "password" ? (
-                <IconCheck size={18} color="#1976d2" />
-              ) : (
-                <IconCopy size={18} color="#1976d2" />
-              )}
-            </button>
+            {password && (
+              <>
+                <button
+                  type="button"
+                  onClick={togglePassword}
+                  className="icon-button"
+                  title={showPassword ? "Hide Password" : "Show Password"}
+                >
+                  {showPassword ? (
+                    <IconEyeOff size={18} color="#1976d2" />
+                  ) : (
+                    <IconEye size={18} color="#1976d2" />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleCopy(password, setCopiedField, "password")
+                  }
+                  className="icon-button"
+                  title="Copy Password"
+                >
+                  {copiedField === "password" ? (
+                    <IconCheck size={18} color="#1976d2" />
+                  ) : (
+                    <IconCopy size={18} color="#1976d2" />
+                  )}
+                </button>
+              </>
+            )}
           </div>
         </div>
 
