@@ -189,7 +189,7 @@ const Credentials = () => {
         data={viewData}
         onClose={() => {
           setShowView(false);
-          if (showViewPassword) setShowViewPassword(false);
+          setShowViewPassword(false);
         }}
         showPassword={showViewPassword}
         togglePassword={() => setShowViewPassword(!showViewPassword)}
