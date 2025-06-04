@@ -7,7 +7,7 @@ const requestApi = {
 
   create: (data) => api.post("/requests", data),
 
-  updateStatus: (id, status) => api.patch(`/requests/${id}`, { status }),
+  updateStatus: (id, status) => api.patch(`/requests/updateReqStatus/${id}`, { status }),
 
   getById: (id) => api.get(`/requests/view/${id}`),
 

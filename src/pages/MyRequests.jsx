@@ -76,7 +76,7 @@ const MyRequests = () => {
   };
 
   const handleSubmit = async () => {
-    if (!requestForm.credential_id || !requestForm.reason) {
+    if (!requestForm.credential_id || !requestForm.reason.trim()) {
       showNotification("Please fill in all fields", "error");
       return;
     }
