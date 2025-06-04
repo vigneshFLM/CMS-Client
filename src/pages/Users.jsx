@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import userApi from "../api/userApi";
 import { useNotification } from "../context/NotificationContext";
+import { handleApiError } from "../utils/errorHandler";
+import { validateUser } from "../utils/validateUser";
 import UserFilters from "../components/Users/UserFilters";
 import UserForm from "../components/Users/UserForm";
 import UserTable from "../components/Users/UserTable";
@@ -45,7 +47,7 @@ const Users = () => {
       setFiltered(usersRes.data);
       setManagers(managersRes.data);
     } catch (err) {
-      showNotification("Failed to fetch users/managers", "error");
+      handleApiError(err, showNotification, "Failed to fetch users/managers");
     }
   };
 
@@ -95,29 +97,33 @@ const Users = () => {
       setFiltered(usersRes.data);
       setManagers(managersRes.data);
     } catch (err) {
-      showNotification("Failed to fetch users/managers", "error");
+      handleApiError(err, showNotification, "Failed to fetch users/managers");
     }
   };
 
   const handleAddUser = async () => {
+    if (!validateUser(newUser, showNotification, false)) return;
+
     try {
       await userApi.register(newUser);
       resetForm();
-      fetchData();
+      fetchUsers();
       showNotification("User added successfully!", "success");
     } catch (err) {
-      showNotification("Failed to add user", "error");
+      handleApiError(err, showNotification, "Failed to add user");
     }
   };
 
   const handleUpdateUser = async () => {
+    if (!validateUser(newUser, showNotification, true)) return;
+
     try {
       await userApi.update(editId, newUser);
       resetForm();
-      fetchData();
+      fetchUsers();
       showNotification("User updated successfully!", "success");
     } catch (err) {
-      showNotification("Failed to update user", "error");
+      handleApiError(err, showNotification, "Failed to update user");
     }
   };
 
@@ -127,7 +133,7 @@ const Users = () => {
       setUsers((prev) => prev.filter((u) => u.id !== id));
       showNotification("User deleted successfully!", "success");
     } catch (err) {
-      showNotification("Failed to delete user", "error");
+      handleApiError(err, showNotification, "Failed to delete user");
     }
   };
 

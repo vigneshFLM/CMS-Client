@@ -7,6 +7,7 @@ import { useNotification } from "../context/NotificationContext";
 import RequestsAPI from "../api/requestsApi";
 import AccessApi from "../api/accessApi";
 import { IconLoader2 } from "@tabler/icons-react";
+import { handleApiError } from "../utils/errorHandler";
 
 const ApprovalsRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -29,8 +30,8 @@ const ApprovalsRequests = () => {
         );
         setRequests(sorted);
         setFiltered(sorted);
-      } catch {
-        showNotification("Failed to load requests", "error");
+      } catch (err) {
+        handleApiError(err, showNotification, "Failed to load requests");
       } finally {
         setLoading(false);
       }
@@ -40,6 +41,10 @@ const ApprovalsRequests = () => {
   }, []);
 
   useEffect(() => {
+    filterRequests();
+  }, [search, statusFilter, requests]);
+
+  const filterRequests = () => {
     let list = [...requests];
     if (search.trim()) {
       const term = search.toLowerCase();
@@ -55,23 +60,26 @@ const ApprovalsRequests = () => {
     }
     setFiltered(list);
     setCurrentPage(1);
-  }, [search, statusFilter, requests]);
+  };
 
   const handleStatusUpdate = async (id, status, userId, credentialId) => {
     try {
       if (status === "approved") {
         await AccessApi.grantAccess(userId, credentialId);
       }
+
       await RequestsAPI.updateStatus(id, status);
+
       showNotification(`Request ${status}`, "success");
-      const updated = await RequestsAPI.getAll();
-      setRequests(
-        updated.data.sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        )
+
+      // Refresh requests after update
+      const res = await RequestsAPI.getAll();
+      const sorted = res.data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
+      setRequests(sorted);
     } catch (err) {
-      showNotification("Update failed", "error");
+      handleApiError(err, showNotification, "Update failed");
     }
   };
 

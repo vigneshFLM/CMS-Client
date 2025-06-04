@@ -9,9 +9,9 @@ import { AuthProvider } from "./context/AuthContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <AuthProvider>
-    <NotificationProvider>
+  <NotificationProvider>
+    <AuthProvider>
       <App />
-    </NotificationProvider>
-  </AuthProvider>
+    </AuthProvider>
+  </NotificationProvider>
 );

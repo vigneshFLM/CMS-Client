@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import authAPI from "../api/authApi";
@@ -6,6 +5,7 @@ import AuthLayout from "../components/Auth/AuthLayout";
 import PasswordInput from "../components/Auth/PasswordInput";
 import { useAuth } from "../context/AuthContext";
 import { useNotification } from "../context/NotificationContext";
+import { handleApiError } from "../utils/errorHandler"; // ✅
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +23,7 @@ const Login = () => {
       showNotification("Login successful!", "success");
       navigate("/dashboard");
     } catch (err) {
-      showNotification("Login failed", "error");
+      handleApiError(err, showNotification, "Login failed");
     }
   };
 

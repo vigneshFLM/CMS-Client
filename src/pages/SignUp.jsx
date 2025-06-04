@@ -4,6 +4,7 @@ import authAPI from "../api/authApi";
 import AuthLayout from "../components/Auth/AuthLayout";
 import PasswordInput from "../components/Auth/PasswordInput";
 import { useNotification } from "../context/NotificationContext";
+import { handleApiError } from "../utils/errorHandler";
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -26,7 +27,7 @@ const SignUp = () => {
         const res = await authAPI.getManagers();
         setManagers(res.data);
       } catch (err) {
-        showNotification("Failed to fetch managers", "error");
+        handleApiError(err, showNotification, "Failed to fetch managers");
       }
     };
     fetchManagers();
@@ -48,7 +49,7 @@ const SignUp = () => {
       await authAPI.register(payload);
       showNotification("User registered successfully!", "success");
     } catch (err) {
-      showNotification("Sign Up failed", "error");
+      handleApiError(err, showNotification, "Sign Up failed");
     }
   };
 

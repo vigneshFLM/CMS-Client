@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CredentialAPI from "../api/credentialApi";
 import { useNotification } from "../context/NotificationContext";
 import { useAuth } from "../context/AuthContext";
+import { handleApiError } from "../utils/errorHandler";
 import "../styles/Credentials.css";
 
 import CredentialForm from "../components/Credentials/CredentialForm";
@@ -41,7 +42,7 @@ const Credentials = () => {
       setCredentials(res.data);
       setFiltered(res.data);
     } catch (err) {
-      showNotification(res.message, "info");
+      handleApiError(err, showNotification, "Failed to load credentials");
     }
   };
 
@@ -84,7 +85,7 @@ const Credentials = () => {
       fetchCredentials();
       showNotification("Credential added successfully!", "success");
     } catch (err) {
-      showNotification("Failed to add credential", "error");
+      handleApiError(err, showNotification, "Failed to add credential");
     }
   };
 
@@ -97,11 +98,11 @@ const Credentials = () => {
       setCredentialData({
         name: fullData.name,
         username: fullData.username,
-        password: fullData.password, // fetched password
+        password: fullData.password,
       });
       setShowForm(true);
-    } catch (error) {
-      showNotification("Failed to fetch full credential", "error");
+    } catch (err) {
+      handleApiError(err, showNotification, "Failed to fetch credential");
     }
   };
 
@@ -114,7 +115,7 @@ const Credentials = () => {
       setCredentialData({ name: "", username: "", password: "" });
       showNotification("Credential updated successfully!", "success");
     } catch (err) {
-      showNotification("Update failed", "error");
+      handleApiError(err, showNotification, "Failed to update credential");
     }
   };
 
@@ -124,7 +125,7 @@ const Credentials = () => {
       setViewData(res.data);
       setShowView(true);
     } catch (err) {
-      showNotification("Failed to load credential", "error");
+      handleApiError(err, showNotification, "Failed to load credential");
     }
   };
 
@@ -134,7 +135,7 @@ const Credentials = () => {
       setCredentials((prev) => prev.filter((c) => c.credential_id !== id));
       showNotification("Credential deleted successfully!", "success");
     } catch (err) {
-      showNotification("Delete failed", "error");
+      handleApiError(err, showNotification, "Failed to delete credential");
     }
   };
 

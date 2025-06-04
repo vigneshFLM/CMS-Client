@@ -6,13 +6,13 @@ import AccessTable from "../components/AccessManagement/AccessTable";
 import Pagination from "../components/Pagination";
 import usePagination from "../hooks/usePagination";
 import { useNotification } from "../context/NotificationContext";
+import { handleApiError } from "../utils/errorHandler";
 
 const AccessManagement = () => {
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [revokingId, setRevokingId] = useState(null);
   const { showNotification } = useNotification();
@@ -26,7 +26,11 @@ const AccessManagement = () => {
         setData(response.data);
         setFiltered(response.data);
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch mappings");
+        handleApiError(
+          err,
+          showNotification,
+          "Failed to fetch access mappings"
+        );
       } finally {
         setLoading(false);
       }
@@ -74,9 +78,9 @@ const AccessManagement = () => {
           : entry
       );
       setData(updated);
-      showNotification("Credential Revoked!", "success");
+      showNotification("Credential revoked successfully", "success");
     } catch (err) {
-      showNotification("Failed to revoke Credential!", "error");
+      handleApiError(err, showNotification, "Failed to revoke credential");
     } finally {
       setRevokingId(null);
     }
@@ -91,7 +95,6 @@ const AccessManagement = () => {
   } = usePagination(filtered, rowsPerPage);
 
   if (loading) return <div>Loading access data...</div>;
-  if (error) return <div className="text-red-600">{error}</div>;
 
   return (
     <div className="AccessManagement-container">

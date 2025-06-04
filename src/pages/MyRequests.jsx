@@ -8,6 +8,7 @@ import RequestView from "../components/MyRequests/RequestView";
 import Pagination from "../components/Pagination";
 import { IconLoader2 } from "@tabler/icons-react";
 import "../styles/MyRequests.css";
+import { handleApiError } from "../utils/errorHandler";
 
 const MyRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -39,8 +40,8 @@ const MyRequests = () => {
       );
       setRequests(sorted);
       setFiltered(sorted);
-    } catch {
-      showNotification("Failed to load your requests", "error");
+    } catch (err) {
+      handleApiError(err, showNotification, "Failed to load your requests");
     } finally {
       setLoading(false);
     }
@@ -69,8 +70,8 @@ const MyRequests = () => {
       setRequestForm({ credential_id: "", reason: "" });
       setEditingRequestId(null);
       setShowRequestForm(true);
-    } catch {
-      showNotification("Failed to load credentials", "error");
+    } catch (err) {
+      handleApiError(err, showNotification, "Failed to load credentials");
     }
   };
 
@@ -92,7 +93,7 @@ const MyRequests = () => {
       setShowRequestForm(false);
       fetchRequests();
     } catch (err) {
-      showNotification("Failed to submit request", "error");
+      handleApiError(err, showNotification, "Failed to submit request");
     } finally {
       setSubmitting(false);
     }
@@ -103,8 +104,8 @@ const MyRequests = () => {
       await requestApi.delete(id);
       showNotification("Request deleted successfully", "success");
       fetchRequests();
-    } catch {
-      showNotification("Failed to delete request", "error");
+    } catch (err) {
+      handleApiError(err, showNotification, "Failed to delete request");
     }
   };
 
@@ -118,8 +119,8 @@ const MyRequests = () => {
       });
       setEditingRequestId(id);
       setShowRequestForm(true);
-    } catch {
-      showNotification("Failed to fetch request for editing", "error");
+    } catch (err) {
+      handleApiError(err, showNotification, "Failed to fetch request for editing");
     }
   };
 
@@ -129,8 +130,8 @@ const MyRequests = () => {
       const req = res.data;
       setSelectedRequestData(req);
       setShowRequestView(true);
-    } catch {
-      showNotification("Failed to view request", "error");
+    } catch (err) {
+      handleApiError(err, showNotification, "Failed to view request");
     }
   };
 

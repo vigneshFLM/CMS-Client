@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import api from "../services/api";
 import authApi from "../api/authApi";
 import { useNotification } from "../context/NotificationContext";
 import ProfileDetails from "../components/Profile/ProfileDetails";
 import ChangePasswordForm from "../components/Profile/ChangePasswordForm";
+import { handleApiError } from "../utils/errorHandler";
 
 const Profile = () => {
   const { token, user } = useAuth();
@@ -24,14 +24,14 @@ const Profile = () => {
     e.preventDefault();
     try {
       await authApi.changePassword({ oldPassword, newPassword }, token);
-      showNotification("Password updated successfully! Logging out...");
+      showNotification("Password updated successfully! Logging out...", "success");
 
       setTimeout(() => {
         localStorage.removeItem("token");
         window.location.href = "/login";
       }, 1500);
     } catch (err) {
-      showNotification("Failed to update password", "error");
+      handleApiError(err, showNotification, "Failed to update password");
     }
   };
 
