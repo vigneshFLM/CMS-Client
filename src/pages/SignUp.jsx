@@ -2,23 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import authAPI from "../api/authApi";
 import AuthLayout from "../components/Auth/AuthLayout";
-import PasswordInput from "../components/Auth/PasswordInput";
 import { useNotification } from "../context/NotificationContext";
 import { handleApiError } from "../utils/errorHandler";
+import { IconEye, IconEyeOff, IconChevronDown } from "@tabler/icons-react";
 
 const SignUp = () => {
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     mobile: "",
-    role: "user",
+    role: "",
     designation: "",
     manager_id: "",
   });
 
   const [managers, setManagers] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { showNotification } = useNotification();
 
   useEffect(() => {
@@ -40,14 +42,22 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (form.password !== form.confirmPassword) {
+      showNotification("Passwords do not match", "warning");
+      return;
+    }
+
+    const { confirmPassword, ...formData } = form;
+
     const payload = {
-      ...form,
+      ...formData,
       manager_id: form.manager_id ? Number(form.manager_id) : null,
     };
 
     try {
       await authAPI.register(payload);
       showNotification("User registered successfully!", "success");
+      window.location.href = "/login";
     } catch (err) {
       handleApiError(err, showNotification, "Sign Up failed");
     }
@@ -65,32 +75,63 @@ const SignUp = () => {
               name="name"
               value={form.name}
               onChange={handleChange}
+              placeholder="Enter name"
               required
             />
 
             <label>Email</label>
             <input
+              type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
+              placeholder="Enter email"
               required
             />
 
             <label>Password</label>
-            <PasswordInput
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              showPassword={showPassword}
-              toggle={() => setShowPassword(!showPassword)}
-            />
+            <div className="password-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                required
+              />
+              <span
+                className="toggle-icon"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? (
+                  <IconEyeOff size={18} />
+                ) : (
+                  <IconEye size={18} />
+                )}
+              </span>
+            </div>
 
-            <label>Mobile</label>
-            <input
-              name="mobile"
-              value={form.mobile}
-              onChange={handleChange}
-              required
-            />
+            <label>Confirm Password</label>
+            <div className="password-wrapper">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm your password"
+                required
+              />
+              <span
+                className="toggle-icon"
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+              >
+                {showConfirmPassword ? (
+                  <IconEyeOff size={18} />
+                ) : (
+                  <IconEye size={18} />
+                )}
+              </span>
+            </div>
           </div>
 
           <div>
@@ -102,28 +143,48 @@ const SignUp = () => {
               placeholder="e.g., Software Developer"
               required
             />
-
             <label>Role</label>
-            <select name="role" value={form.role} onChange={handleChange}>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-              <option value="super-admin">Super Admin</option>
-            </select>
+            <div className="select-wrapper">
+              <select
+                name="role"
+                value={form.role}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Role</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+                <option value="super-admin">Super Admin</option>
+              </select>
+              <IconChevronDown className="select-icon" size={18} />
+            </div>
 
             <label>Manager</label>
-            <select
-              name="manager_id"
-              value={form.manager_id}
+            <div className="select-wrapper">
+              <select
+                name="manager_id"
+                value={form.manager_id}
+                onChange={handleChange}
+              >
+                <option value="">Select Manager</option>
+                <option value="None">None</option>
+                {managers.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name} {m.designation ? `(${m.designation})` : ""}
+                  </option>
+                ))}
+              </select>
+              <IconChevronDown className="select-icon" size={18} />
+            </div>
+
+            <label>Mobile</label>
+            <input
+              name="mobile"
+              placeholder="Enter phone number"
+              value={form.mobile}
               onChange={handleChange}
-            >
-              <option value="">Select Manager</option>
-              <option value="None">None</option>
-              {managers.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.name} {m.designation ? `(${m.designation})` : ""}
-                </option>
-              ))}
-            </select>
+              required
+            />
           </div>
         </div>
 
