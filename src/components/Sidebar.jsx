@@ -14,7 +14,7 @@ import "../styles/Sidebar.css";
 
 const Sidebar = () => {
   const location = useLocation();
-  const user = useAuth(); // 🔥 get the logged-in user's role
+  const user = useAuth();
   const isActive = (path) => location.pathname === path;
 
   const menuItems = [

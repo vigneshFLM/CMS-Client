@@ -7,12 +7,14 @@ import {
 import "../styles/Navbar.css";
 import { useAuth } from "../context/AuthContext";
 import { useNotification } from "../context/NotificationContext";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { user } = useAuth();
   const { showNotification } = useNotification();
+  const navigate = useNavigate(); // Use useNavigate for navigation
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -28,6 +30,11 @@ const Navbar = () => {
     showNotification("Logging out!", "success");
     localStorage.removeItem("token");
     window.location.href = "/login";
+  };
+
+  const handleProfile = () => {
+    showNotification("Redirecting to profile!", "info");
+    navigate("/profile"); // Use navigate for profile redirection
   };
 
   return (
@@ -55,6 +62,9 @@ const Navbar = () => {
 
           {dropdownOpen && (
             <div className="profile-dropdown">
+              <div className="dropdown-item" onClick={handleProfile}>
+                My Profile
+              </div>
               <div className="dropdown-item" onClick={handleLogout}>
                 Logout
               </div>
