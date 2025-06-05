@@ -1,16 +1,17 @@
+import ClipboardJS from 'clipboard';
+
 export const handleCopy = (text, setCopiedField, field) => {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(
-      () => {
-        console.log("Text copied to clipboard!");
-        setCopiedField(field);
-        setTimeout(() => setCopiedField(""), 1500);
-      },
-      (err) => {
-        console.error("Error copying text: ", err);
-      }
-    );
-  } else {
-    console.error("Clipboard API is not available");
-  }
+  const clipboard = new ClipboardJS('.copy-icon-button', {
+    text: () => text, // text to copy
+  });
+
+  clipboard.on('success', function (e) {
+    console.log("Text copied to clipboard!");
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(""), 1500);
+  });
+
+  clipboard.on('error', function (e) {
+    console.error("Clipboard error:", e);
+  });
 };

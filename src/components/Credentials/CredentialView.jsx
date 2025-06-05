@@ -71,7 +71,7 @@ const CredentialView = ({
                 <button
                   type="button"
                   onClick={togglePassword}
-                  className="icon-button"
+                  className="icon-button copy-icon-button"
                   title={showPassword ? "Hide Password" : "Show Password"}
                 >
                   {showPassword ? (
@@ -85,7 +85,7 @@ const CredentialView = ({
                   onClick={() =>
                     handleCopy(password, setCopiedField, "password")
                   }
-                  className="icon-button"
+                  className="icon-button copy-icon-button"
                   title="Copy Password"
                 >
                   {copiedField === "password" ? (
