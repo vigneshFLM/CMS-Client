@@ -1,5 +1,5 @@
 import ClipboardJS from "clipboard";
-import { useNotification } from "../hooks/useNotification";
+import { useNotification } from "../context/NotificationContext";
 
 export const handleCopy = (text, setCopiedField, field) => {
   const clipboard = new ClipboardJS(".copy-icon-button", {
