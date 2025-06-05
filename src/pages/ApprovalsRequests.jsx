@@ -9,6 +9,7 @@ import AccessApi from "../api/accessApi";
 import { IconLoader2 } from "@tabler/icons-react";
 import { handleApiError } from "../utils/errorHandler";
 import { useAuth } from "../context/AuthContext";
+import ConfirmationOverlay from "../components/ConfirmationOverlay";
 
 const ApprovalsRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -19,9 +20,12 @@ const ApprovalsRequests = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const requestsPerPage = 10;
   const { user } = useAuth();
+  const { showNotification } = useNotification();
 
   const currentUserId = user?.id || null;
-  const { showNotification } = useNotification();
+
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayData, setOverlayData] = useState({});
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -65,12 +69,27 @@ const ApprovalsRequests = () => {
     setCurrentPage(1);
   };
 
-  const handleStatusUpdate = async (
+  const confirmStatusUpdate = (
     reqId,
     reqStatus,
     reqUserId,
     reqCredentialId
   ) => {
+    const request = requests.find((r) => r.id === reqId);
+    setOverlayData({
+      actionType: reqStatus === "approved" ? "approveRequest" : "rejectRequest",
+      data: request,
+      reqId,
+      reqStatus,
+      reqUserId,
+      reqCredentialId,
+    });
+    setShowOverlay(true);
+  };
+
+  const handleOverlayConfirm = async () => {
+    const { reqId, reqStatus, reqUserId, reqCredentialId } = overlayData;
+    setShowOverlay(false);
     try {
       if (reqStatus === "approved") {
         await AccessApi.grantAccess(reqUserId, reqCredentialId, currentUserId);
@@ -85,7 +104,7 @@ const ApprovalsRequests = () => {
         )
       );
     } catch (err) {
-      showNotification("Update failed", "error");
+      handleApiError(err, showNotification, "Update failed");
     }
   };
 
@@ -113,7 +132,7 @@ const ApprovalsRequests = () => {
           <ApprovalsTable
             requests={currentRequests}
             indexOfFirst={indexOfFirst}
-            handleStatusUpdate={handleStatusUpdate}
+            handleStatusUpdate={confirmStatusUpdate}
           />
           <Pagination
             totalPages={totalPages}
@@ -122,6 +141,14 @@ const ApprovalsRequests = () => {
           />
         </>
       )}
+
+      <ConfirmationOverlay
+        show={showOverlay}
+        actionType={overlayData.actionType}
+        data={overlayData.data}
+        onConfirm={handleOverlayConfirm}
+        onCancel={() => setShowOverlay(false)}
+      />
     </div>
   );
 };

@@ -7,19 +7,22 @@ const ConfirmationOverlay = ({
 }) => {
   if (!show) return null;
 
-  const name =
-    data?.name || data?.username || data?.credential_name || null;
+  const name = data?.name || data?.username || data?.credential_name || null;
 
   const displayName = name ? ` "${name}"` : "";
 
   const getMessage = () => {
     switch (actionType) {
       case "deleteCred":
-        return <>Are you sure you want to delete the credential{displayName}?</>;
+        return (
+          <>Are you sure you want to delete the credential{displayName}?</>
+        );
       case "editCred":
         return <>Do you want to edit the credential{displayName}?</>;
       case "addCred":
-        return <>Are you sure you want to add the new credential{displayName}?</>;
+        return (
+          <>Are you sure you want to add the new credential{displayName}?</>
+        );
 
       case "deleteUser":
         return <>Are you sure you want to delete the user{displayName}?</>;
@@ -49,6 +52,27 @@ const ConfirmationOverlay = ({
           <>
             Are you sure you want to add the new request for
             {displayName}?<br />
+            Reason: <em>{data?.reason}</em>
+          </>
+        );
+      case "revokeAccess":
+        return <>Are you sure you want to revoke access ?</>;
+
+      case "approveRequest":
+        return (
+          <>
+            Are you sure you want to <strong>approve</strong> the request for{" "}
+            <strong>{data?.credential_name}</strong> by{" "}
+            <strong>{data?.user_name}</strong>?<br />
+            Reason: <em>{data?.reason}</em>
+          </>
+        );
+      case "rejectRequest":
+        return (
+          <>
+            Are you sure you want to <strong>reject</strong> the request for{" "}
+            <strong>{data?.credential_name}</strong> by{" "}
+            <strong>{data?.user_name}</strong>?<br />
             Reason: <em>{data?.reason}</em>
           </>
         );

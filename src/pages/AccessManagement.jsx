@@ -7,6 +7,7 @@ import Pagination from "../components/Pagination";
 import usePagination from "../hooks/usePagination";
 import { useNotification } from "../context/NotificationContext";
 import { handleApiError } from "../utils/errorHandler";
+import ConfirmationOverlay from "../components/ConfirmationOverlay"; // Import the overlay
 
 const AccessManagement = () => {
   const [data, setData] = useState([]);
@@ -15,6 +16,11 @@ const AccessManagement = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [revokingId, setRevokingId] = useState(null);
+
+  // New overlay state
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayData, setOverlayData] = useState(null);
+
   const { showNotification } = useNotification();
 
   const rowsPerPage = 10;
@@ -68,8 +74,18 @@ const AccessManagement = () => {
     setStatusFilter("");
   };
 
-  const handleRevoke = async (userId, credentialId) => {
+  // Instead of revoke immediately, show overlay first
+  const confirmRevoke = (userId, credentialId) => {
+    setOverlayData({ userId, credentialId });
+    setShowOverlay(true);
+  };
+
+  // Called when user confirms revoke in overlay
+  const handleOverlayConfirm = async () => {
+    const { userId, credentialId } = overlayData;
+    setShowOverlay(false);
     setRevokingId(`${userId}-${credentialId}`);
+
     try {
       await AccessAPI.revokeAccess(userId, credentialId);
       const updated = data.map((entry) =>
@@ -108,7 +124,7 @@ const AccessManagement = () => {
 
       <AccessTable
         entries={currentEntries}
-        onRevoke={handleRevoke}
+        onRevoke={confirmRevoke} // Use confirmRevoke instead of handleRevoke directly
         revokingId={revokingId}
         indexOfFirst={indexOfFirst}
       />
@@ -117,6 +133,14 @@ const AccessManagement = () => {
         totalPages={totalPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+      />
+
+      <ConfirmationOverlay
+        show={showOverlay}
+        actionType="revokeAccess"
+        data={overlayData}
+        onConfirm={handleOverlayConfirm}
+        onCancel={() => setShowOverlay(false)}
       />
     </div>
   );
