@@ -6,6 +6,7 @@ import RequestForm from "../components/MyRequests/RequestForm";
 import RequestTable from "../components/MyRequests/RequestTable";
 import RequestView from "../components/MyRequests/RequestView";
 import Pagination from "../components/Pagination";
+import ConfirmationOverlay from "../components/ConfirmationOverlay"; // use your overlay
 import { IconLoader2 } from "@tabler/icons-react";
 import "../styles/MyRequests.css";
 import { handleApiError } from "../utils/errorHandler";
@@ -28,6 +29,10 @@ const MyRequests = () => {
   const requestsPerPage = 10;
   const [showRequestView, setShowRequestView] = useState(false);
   const [selectedRequestData, setSelectedRequestData] = useState(null);
+
+  // Overlay state
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayData, setOverlayData] = useState({ actionType: "", data: null });
 
   const { showNotification } = useNotification();
 
@@ -75,38 +80,58 @@ const MyRequests = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    if (!requestForm.credential_id || !requestForm.reason.trim()) {
-      showNotification("Please fill in all fields", "error");
-      return;
-    }
+  // Show confirmation overlay for action
+  const confirmAction = (actionType, data = null) => {
+    setOverlayData({ actionType, data });
+    setShowOverlay(true);
+  };
+
+  const handleOverlayConfirm = async () => {
+    const { actionType, data } = overlayData;
+    setShowOverlay(false);
 
     try {
       setSubmitting(true);
-      if (editingRequestId) {
-        await requestApi.update(editingRequestId, requestForm);
-        showNotification("Request updated successfully", "success");
-      } else {
-        await requestApi.create(requestForm);
-        showNotification("Request submitted successfully", "success");
+      switch (actionType) {
+        case "deleteRequest":
+          await requestApi.delete(data.id);
+          showNotification("Request deleted successfully", "success");
+          break;
+        case "addRequest":
+          await requestApi.create(requestForm);
+          showNotification("Request submitted successfully", "success");
+          break;
+        case "editRequest":
+          await requestApi.update(editingRequestId, requestForm);
+          showNotification("Request updated successfully", "success");
+          break;
+        default:
+          break;
       }
-      setShowRequestForm(false);
       fetchRequests();
+      setShowRequestForm(false);
+      setEditingRequestId(null);
+      setRequestForm({ credential_id: "", reason: "" });
     } catch (err) {
-      handleApiError(err, showNotification, "Failed to submit request");
+      handleApiError(err, showNotification, "Action failed");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleRequestDelete = async (id) => {
-    try {
-      await requestApi.delete(id);
-      showNotification("Request deleted successfully", "success");
-      fetchRequests();
-    } catch (err) {
-      handleApiError(err, showNotification, "Failed to delete request");
+  // Submit with confirmation
+  const handleSubmit = () => {
+    if (!requestForm.credential_id || !requestForm.reason.trim()) {
+      showNotification("Please fill in all fields", "error");
+      return;
     }
+    confirmAction(editingRequestId ? "editRequest" : "addRequest");
+  };
+
+  // Delete with confirmation
+  const handleRequestDeleteConfirm = (id) => {
+    const req = requests.find((r) => r.id === id);
+    confirmAction("deleteRequest", req);
   };
 
   const handleRequestEdit = async (id) => {
@@ -149,6 +174,7 @@ const MyRequests = () => {
         setStatusFilter={setStatusFilter}
         onNewRequest={handleNewRequest}
       />
+
       <RequestView
         show={showRequestView}
         data={selectedRequestData}
@@ -180,7 +206,7 @@ const MyRequests = () => {
             indexOfFirst={indexOfFirst}
             onEdit={handleRequestEdit}
             onView={handleRequestView}
-            onDelete={handleRequestDelete}
+            onDelete={handleRequestDeleteConfirm}
           />
           <Pagination
             totalPages={totalPages}
@@ -189,6 +215,14 @@ const MyRequests = () => {
           />
         </>
       )}
+
+      <ConfirmationOverlay
+        show={showOverlay}
+        actionType={overlayData.actionType}
+        data={overlayData.data}
+        onConfirm={handleOverlayConfirm}
+        onCancel={() => setShowOverlay(false)}
+      />
     </div>
   );
 };

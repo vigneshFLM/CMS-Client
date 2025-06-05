@@ -10,6 +10,7 @@ import CredentialView from "../components/Credentials/CredentialView";
 import CredentialTable from "../components/Credentials/CredentialTable";
 import CredentialFilters from "../components/Credentials/CredentialFilters";
 import Pagination from "../components/Pagination";
+import ConfirmationOverlay from "../components/ConfirmationOverlay";
 
 const Credentials = () => {
   const [credentials, setCredentials] = useState([]);
@@ -29,6 +30,9 @@ const Credentials = () => {
     username: "",
     password: "",
   });
+
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayData, setOverlayData] = useState({ actionType: "", data: null });
 
   const [currentPage, setCurrentPage] = useState(1);
   const credentialsPerPage = 10;
@@ -76,17 +80,42 @@ const Credentials = () => {
     setCreatorFilter("");
   };
 
-  const handleAddCredential = async () => {
+  const confirmAction = (actionType, data) => {
+    setOverlayData({ actionType, data });
+    setShowOverlay(true);
+  };
+
+  const handleOverlayConfirm = async () => {
+    const { actionType, data } = overlayData;
+    setShowOverlay(false);
+
     try {
-      const res = await CredentialAPI.add(credentialData);
-      setCredentials((prev) => [res.data, ...prev]);
-      setCredentialData({ name: "", username: "", password: "" });
-      setShowForm(false);
-      fetchCredentials();
-      showNotification("Credential added successfully!", "success");
+      switch (actionType) {
+        case "addCred":
+          const addRes = await CredentialAPI.add(credentialData);
+          setCredentials((prev) => [addRes.data, ...prev]);
+          showNotification("Credential added successfully!", "success");
+          break;
+        case "editCred":
+          await CredentialAPI.update(editId, credentialData);
+          showNotification("Credential updated successfully!", "success");
+          break;
+        case "deleteCred":
+          await CredentialAPI.delete(data.credential_id);
+          setCredentials((prev) => prev.filter((c) => c.credential_id !== data.credential_id));
+          showNotification("Credential deleted successfully!", "success");
+          break;
+        default:
+          break;
+      }
     } catch (err) {
-      handleApiError(err, showNotification, "Failed to add credential");
+      handleApiError(err, showNotification, "Action failed");
     }
+
+    fetchCredentials();
+    setCredentialData({ name: "", username: "", password: "" });
+    setShowForm(false);
+    setEditMode(false);
   };
 
   const handleEdit = async (cred) => {
@@ -106,19 +135,6 @@ const Credentials = () => {
     }
   };
 
-  const handleUpdateCredential = async () => {
-    try {
-      await CredentialAPI.update(editId, credentialData);
-      await fetchCredentials();
-      setEditMode(false);
-      setShowForm(false);
-      setCredentialData({ name: "", username: "", password: "" });
-      showNotification("Credential updated successfully!", "success");
-    } catch (err) {
-      handleApiError(err, showNotification, "Failed to update credential");
-    }
-  };
-
   const viewCredential = async (id) => {
     try {
       const res = await CredentialAPI.viewById(id);
@@ -126,16 +142,6 @@ const Credentials = () => {
       setShowView(true);
     } catch (err) {
       handleApiError(err, showNotification, "Failed to load credential");
-    }
-  };
-
-  const handleDeleteCredential = async (id) => {
-    try {
-      await CredentialAPI.delete(id);
-      setCredentials((prev) => prev.filter((c) => c.credential_id !== id));
-      showNotification("Credential deleted successfully!", "success");
-    } catch (err) {
-      handleApiError(err, showNotification, "Failed to delete credential");
     }
   };
 
@@ -176,7 +182,9 @@ const Credentials = () => {
           setCredentialData({ name: "", username: "", password: "" });
           setEditMode(false);
         }}
-        onSubmit={editMode ? handleUpdateCredential : handleAddCredential}
+        onSubmit={() => {
+          confirmAction(editMode ? "editCred" : "addCred", credentialData);
+        }}
         credentialData={credentialData}
         setCredentialData={setCredentialData}
         editMode={editMode}
@@ -201,13 +209,24 @@ const Credentials = () => {
         credentials={currentCredentials}
         onView={viewCredential}
         onEdit={handleEdit}
-        onDelete={handleDeleteCredential}
+        onDelete={(id) => {
+          const cred = credentials.find((c) => c.credential_id === id);
+          confirmAction("deleteCred", cred);
+        }}
       />
 
       <Pagination
         totalPages={totalPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+      />
+
+      <ConfirmationOverlay
+        show={showOverlay}
+        actionType={overlayData.actionType}
+        data={overlayData.data}
+        onConfirm={handleOverlayConfirm}
+        onCancel={() => setShowOverlay(false)}
       />
     </div>
   );

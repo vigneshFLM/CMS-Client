@@ -8,6 +8,7 @@ import UserFilters from "../components/Users/UserFilters";
 import UserForm from "../components/Users/UserForm";
 import UserTable from "../components/Users/UserTable";
 import Pagination from "../components/Pagination";
+import ConfirmationOverlay from "../components/ConfirmationOverlay";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -29,6 +30,12 @@ const Users = () => {
     manager_id: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayData, setOverlayData] = useState({
+    actionType: "",
+    data: null,
+  });
+
   const usersPerPage = 10;
   const { showNotification } = useNotification();
 
@@ -61,14 +68,16 @@ const Users = () => {
 
   const filterUsers = () => {
     let list = [...users];
-    if (search.trim()) {
-      const term = search.toLowerCase();
+    const term = search.toLowerCase().trim();
+
+    if (term) {
       list = list.filter(
         (u) =>
           u.name.toLowerCase().includes(term) ||
           u.email.toLowerCase().includes(term)
       );
     }
+
     if (roleFilter) list = list.filter((u) => u.role === roleFilter);
     if (managerFilter)
       list = list.filter((u) => u.manager_name === managerFilter);
@@ -83,57 +92,45 @@ const Users = () => {
         return true;
       });
     }
+
     setFiltered(list);
     setCurrentPage(1);
   };
 
-  const fetchData = async () => {
-    try {
-      const [usersRes, managersRes] = await Promise.all([
-        fetchUsers(),
-        fetchManagers(),
-      ]);
-      setUsers(usersRes.data);
-      setFiltered(usersRes.data);
-      setManagers(managersRes.data);
-    } catch (err) {
-      handleApiError(err, showNotification, "Failed to fetch users/managers");
-    }
+  const resetForm = () => {
+    setNewUser({ name: "", email: "", password: "", role: "", manager_id: "" });
+    setShowForm(false);
+    setEditMode(false);
+    setEditId(null);
   };
 
-  const handleAddUser = async () => {
-    if (!validateUser(newUser, showNotification, false)) return;
+  const confirmAction = (actionType, data) => {
+    setOverlayData({ actionType, data });
+    setShowOverlay(true);
+  };
+
+  const handleOverlayConfirm = async () => {
+    const { actionType, data } = overlayData;
+    setShowOverlay(false);
 
     try {
-      await userApi.register(newUser);
+      if (actionType === "addUser") {
+        if (!validateUser(newUser, showNotification, false)) return;
+        await userApi.register(newUser);
+        showNotification("User added successfully!", "success");
+      } else if (actionType === "editUser") {
+        if (!validateUser(newUser, showNotification, true)) return;
+        await userApi.update(editId, newUser);
+        showNotification("User updated successfully!", "success");
+      } else if (actionType === "deleteUser") {
+        await userApi.delete(data.id);
+        showNotification("User deleted successfully!", "success");
+      }
+
       resetForm();
       fetchUsers();
-      showNotification("User added successfully!", "success");
     } catch (err) {
-      handleApiError(err, showNotification, "Failed to add user");
-    }
-  };
-
-  const handleUpdateUser = async () => {
-    if (!validateUser(newUser, showNotification, true)) return;
-
-    try {
-      await userApi.update(editId, newUser);
-      resetForm();
-      fetchUsers();
-      showNotification("User updated successfully!", "success");
-    } catch (err) {
-      handleApiError(err, showNotification, "Failed to update user");
-    }
-  };
-
-  const handleDeleteUser = async (id) => {
-    try {
-      await userApi.delete(id);
-      setUsers((prev) => prev.filter((u) => u.id !== id));
-      showNotification("User deleted successfully!", "success");
-    } catch (err) {
-      handleApiError(err, showNotification, "Failed to delete user");
+      handleApiError(err, showNotification, "Action failed");
     }
   };
 
@@ -142,13 +139,6 @@ const Users = () => {
     setEditId(user.id);
     setNewUser({ ...user, password: "" });
     setShowForm(true);
-  };
-
-  const resetForm = () => {
-    setNewUser({ name: "", email: "", password: "", role: "", manager_id: "" });
-    setShowForm(false);
-    setEditMode(false);
-    setEditId(null);
   };
 
   return (
@@ -170,7 +160,17 @@ const Users = () => {
           setAccessFilter("");
         }}
         showForm={showForm}
-        setShowForm={setShowForm}
+        setShowForm={() => {
+          setEditMode(false);
+          setNewUser({
+            name: "",
+            email: "",
+            password: "",
+            role: "",
+            manager_id: "",
+          });
+          setShowForm(true);
+        }}
       />
 
       {showForm && (
@@ -179,7 +179,9 @@ const Users = () => {
           setNewUser={setNewUser}
           roles={roles}
           managers={managers}
-          onSubmit={editMode ? handleUpdateUser : handleAddUser}
+          onSubmit={() =>
+            confirmAction(editMode ? "editUser" : "addUser", newUser)
+          }
           onCancel={resetForm}
           editMode={editMode}
         />
@@ -189,13 +191,24 @@ const Users = () => {
         users={currentUsers}
         indexOfFirstUser={indexOfFirstUser}
         onEdit={handleEdit}
-        onDelete={handleDeleteUser}
+        onDelete={(id) => {
+          const user = users.find((u) => u.id === id);
+          confirmAction("deleteUser", user);
+        }}
       />
 
       <Pagination
         totalPages={totalPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+      />
+
+      <ConfirmationOverlay
+        show={showOverlay}
+        actionType={overlayData.actionType}
+        data={overlayData.data}
+        onConfirm={handleOverlayConfirm}
+        onCancel={() => setShowOverlay(false)}
       />
     </div>
   );
