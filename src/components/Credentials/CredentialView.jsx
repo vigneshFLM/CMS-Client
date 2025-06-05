@@ -38,10 +38,8 @@ const CredentialView = ({
             {data.username && (
               <button
                 type="button"
-                onClick={() =>
-                  handleCopy(username, setCopiedField, "username")
-                }
-                className="icon-button"
+                onClick={() => handleCopy(username, setCopiedField, "username")}
+                className="icon-button copy-icon-button"
                 title="Copy Username"
               >
                 {copiedField === "username" ? (
@@ -71,7 +69,7 @@ const CredentialView = ({
                 <button
                   type="button"
                   onClick={togglePassword}
-                  className="icon-button copy-icon-button"
+                  className="icon-button"
                   title={showPassword ? "Hide Password" : "Show Password"}
                 >
                   {showPassword ? (
