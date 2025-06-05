@@ -8,6 +8,7 @@ import RequestsAPI from "../api/requestsApi";
 import AccessApi from "../api/accessApi";
 import { IconLoader2 } from "@tabler/icons-react";
 import { handleApiError } from "../utils/errorHandler";
+import { useAuth } from "../context/AuthContext";
 
 const ApprovalsRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -17,7 +18,9 @@ const ApprovalsRequests = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const requestsPerPage = 10;
+  const { user } = useAuth();
 
+  const currentUserId = user?.id || null;
   const { showNotification } = useNotification();
 
   useEffect(() => {
@@ -62,24 +65,27 @@ const ApprovalsRequests = () => {
     setCurrentPage(1);
   };
 
-  const handleStatusUpdate = async (id, status, userId, credentialId) => {
+  const handleStatusUpdate = async (
+    reqId,
+    reqStatus,
+    reqUserId,
+    reqCredentialId
+  ) => {
     try {
-      if (status === "approved") {
-        await AccessApi.grantAccess(userId, credentialId);
+      if (reqStatus === "approved") {
+        await AccessApi.grantAccess(reqUserId, reqCredentialId, currentUserId);
       }
+      await RequestsAPI.updateStatus(reqId, reqStatus, currentUserId);
+      showNotification(`Request ${reqStatus}`, "success");
 
-      await RequestsAPI.updateStatus(id, status);
-
-      showNotification(`Request ${status}`, "success");
-
-      // Refresh requests after update
-      const res = await RequestsAPI.getAll();
-      const sorted = res.data.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      const updated = await RequestsAPI.getAll();
+      setRequests(
+        updated.data.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        )
       );
-      setRequests(sorted);
     } catch (err) {
-      handleApiError(err, showNotification, "Update failed");
+      showNotification("Update failed", "error");
     }
   };
 
