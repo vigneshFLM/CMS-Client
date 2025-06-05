@@ -209,6 +209,7 @@ const Credentials = () => {
         credentials={currentCredentials}
         onView={viewCredential}
         onEdit={handleEdit}
+        userRole={user.role}
         onDelete={(id) => {
           const cred = credentials.find((c) => c.credential_id === id);
           confirmAction("deleteCred", cred);

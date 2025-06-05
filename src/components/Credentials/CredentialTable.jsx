@@ -1,7 +1,7 @@
 import { IconEye, IconEdit, IconTrash } from "@tabler/icons-react";
 import "../../styles/Credentials.css";
 
-const CredentialTable = ({ credentials, onView, onEdit, onDelete }) => (
+const CredentialTable = ({ credentials, onView, onEdit, onDelete, userRole }) => (
   <div className="table-wrapper">
     <table className="table credential-table">
       <thead>
@@ -21,6 +21,7 @@ const CredentialTable = ({ credentials, onView, onEdit, onDelete }) => (
             <td>{c.created_by_name}</td>
             <td>{new Date(c.created_at).toLocaleString()}</td>
             <td className="action-buttons">
+              {/* View button - always visible */}
               <button
                 className="action-button view-button"
                 onClick={() => onView(c.credential_id)}
@@ -28,20 +29,28 @@ const CredentialTable = ({ credentials, onView, onEdit, onDelete }) => (
               >
                 <IconEye size={18} />
               </button>
-              <button
-                className="action-button edit-icon"
-                onClick={() => onEdit(c)}
-                title="Edit"
-              >
-                <IconEdit size={18} />
-              </button>
-              <button
-                className="action-button delete-icon"
-                onClick={() => onDelete(c.credential_id)}
-                title="Delete"
-              >
-                <IconTrash size={18} color="#d32f2f" />
-              </button>
+
+              {/* Edit button - visible for super-admin and admin */}
+              {(userRole === 'super-admin' || userRole === 'admin') && (
+                <button
+                  className="action-button edit-icon"
+                  onClick={() => onEdit(c)}
+                  title="Edit"
+                >
+                  <IconEdit size={18} />
+                </button>
+              )}
+
+              {/* Delete button - visible for super-admin and admin */}
+              {(userRole === 'super-admin' || userRole === 'admin') && (
+                <button
+                  className="action-button delete-icon"
+                  onClick={() => onDelete(c.credential_id)}
+                  title="Delete"
+                >
+                  <IconTrash size={18} color="#d32f2f" />
+                </button>
+              )}
             </td>
           </tr>
         ))}
