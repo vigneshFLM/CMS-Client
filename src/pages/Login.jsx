@@ -5,7 +5,7 @@ import AuthLayout from "../components/Auth/AuthLayout";
 import PasswordInput from "../components/Auth/PasswordInput";
 import { useAuth } from "../context/AuthContext";
 import { useNotification } from "../context/NotificationContext";
-import { handleApiError } from "../utils/errorHandler"; // ✅
+import { handleApiError } from "../utils/errorHandler"; 
 
 const Login = () => {
   const [email, setEmail] = useState("");

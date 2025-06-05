@@ -1,6 +1,7 @@
 import { handleCopy } from "../../utils/clipboardUtils";
 import { IconEye, IconEyeOff, IconCopy, IconCheck } from "@tabler/icons-react";
 import "../../styles/Credentials.css";
+import { useNotification } from "../../context/NotificationContext";
 
 const CredentialView = ({
   show,
@@ -11,6 +12,8 @@ const CredentialView = ({
   copiedField,
   setCopiedField,
 }) => {
+  const { showNotification } = useNotification(); // Get showNotification from context
+
   if (!show || !data) return null;
 
   const name = data.name || "N/A";
@@ -38,7 +41,9 @@ const CredentialView = ({
             {data.username && (
               <button
                 type="button"
-                onClick={() => handleCopy(username, setCopiedField, "username")}
+                onClick={() =>
+                  handleCopy(username, setCopiedField, "username", showNotification)
+                }
                 className="icon-button copy-icon-button"
                 title="Copy Username"
               >
@@ -81,7 +86,7 @@ const CredentialView = ({
                 <button
                   type="button"
                   onClick={() =>
-                    handleCopy(password, setCopiedField, "password")
+                    handleCopy(password, setCopiedField, "password", showNotification)
                   }
                   className="icon-button copy-icon-button"
                   title="Copy Password"
