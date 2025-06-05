@@ -2,7 +2,6 @@ import React from "react";
 
 const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
 
-    console.log("Rendering Pagination", { totalPages, currentPage });
   if (totalPages <= 1) return null;
 
   const handleClick = (page) => {
