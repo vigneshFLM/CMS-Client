@@ -9,6 +9,7 @@ import UserForm from "../components/Users/UserForm";
 import UserTable from "../components/Users/UserTable";
 import Pagination from "../components/Pagination";
 import ConfirmationOverlay from "../components/ConfirmationOverlay";
+import { useAuth } from "../context/AuthContext";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -38,21 +39,33 @@ const Users = () => {
 
   const usersPerPage = 10;
   const { showNotification } = useNotification();
+  const { user } = useAuth();
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filtered.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filtered.length / usersPerPage);
 
+  // Fetch users based on role (super-admin or admin)
   const fetchUsers = async () => {
     try {
-      const [usersRes, managersRes] = await Promise.all([
-        api.get("/users"),
-        api.get("/users/admins"),
-      ]);
-      setUsers(usersRes.data);
-      setFiltered(usersRes.data);
-      setManagers(managersRes.data);
+      if (user.role === "super-admin") {
+        // Super-admin fetches all users
+        const [usersRes, managersRes] = await Promise.all([
+          userApi.fetchAll(),
+          userApi.fetchManagers(),
+        ]);
+        setUsers(usersRes.data);
+        setFiltered(usersRes.data);
+        setManagers(managersRes.data);
+      } else if (user.role === "admin") {
+        // Admin fetches only users managed by them
+        const [usersRes, managersRes] = await Promise.all([
+          api.get(`/users/admin/${user.id}/users`),
+        ]);
+        setUsers(usersRes.data);
+        setFiltered(usersRes.data);
+      }
     } catch (err) {
       handleApiError(err, showNotification, "Failed to fetch users/managers");
     }
@@ -189,6 +202,7 @@ const Users = () => {
 
       <UserTable
         users={currentUsers}
+        userRole={user.role}
         indexOfFirstUser={indexOfFirstUser}
         onEdit={handleEdit}
         onDelete={(id) => {

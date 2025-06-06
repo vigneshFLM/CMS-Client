@@ -1,7 +1,7 @@
 import React from "react";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 
-const UserTable = ({ users, indexOfFirstUser, onEdit, onDelete }) => (
+const UserTable = ({ users, indexOfFirstUser, onEdit, onDelete, userRole }) => (
   <div className="table-wrapper">
     <table className="table">
       <thead>
@@ -14,7 +14,7 @@ const UserTable = ({ users, indexOfFirstUser, onEdit, onDelete }) => (
           <th>Role</th>
           <th>Manager</th>
           <th>Access Count</th>
-          <th>Actions</th>
+          {userRole === "super-admin" && <th>Actions</th>}
         </tr>
       </thead>
       <tbody>
@@ -29,12 +29,19 @@ const UserTable = ({ users, indexOfFirstUser, onEdit, onDelete }) => (
             <td>{u.manager_name || "-"}</td>
             <td>{u.access_count}</td>
             <td>
-              {u.role !== "super-admin" && (
+              {(userRole === "super-admin" ||
+                (userRole === "admin" && u.manager_id === userRole.id)) && (
                 <div className="action-buttons">
-                  <button className="action-button edit-icon" onClick={() => onEdit(u)}>
+                  <button
+                    className="action-button edit-icon"
+                    onClick={() => onEdit(u)}
+                  >
                     <IconEdit size={16} color="#1976d2" />
                   </button>
-                  <button className="action-button delete-icon" onClick={() => onDelete(u.id)}>
+                  <button
+                    className="action-button delete-icon"
+                    onClick={() => onDelete(u.id)}
+                  >
                     <IconTrash size={16} color="#d32f2f" />
                   </button>
                 </div>

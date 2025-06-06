@@ -34,7 +34,7 @@ const Sidebar = () => {
       path: "/users",
       icon: <IconUsers size={18} />,
       label: "Users",
-      roles: ["super-admin"],
+      roles: ["super-admin", "admin"],
     },
     {
       path: "/credentials",
