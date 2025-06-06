@@ -11,7 +11,7 @@
 
 .auth-container {
   display: flex;
-  flex-direction: column;  /* Start with column for mobile */
+  flex-direction: column; /* Start with column for mobile */
   height: auto;
   margin: 0;
   padding: 0;
@@ -27,7 +27,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  border-radius: 10px;
+  border-bottom-right-radius: 80px;
 }
 
 .auth-left h1 {
@@ -49,6 +49,7 @@
   justify-content: center;
   align-items: center;
   padding: 15px;
+  border-top-left-radius: 80px;
 }
 
 .password-wrapper {
@@ -57,13 +58,16 @@
 
 .password-wrapper input {
   width: 100%;
-  padding-right: 35px; /* Add space for the icon */
+  padding-right: 35px;
 }
 
-.login-form input,
-.password-wrapper input {
+.login-form input {
   width: 100%;
   box-sizing: border-box;
+}
+
+.password-wrapper input {
+  height: 35px;
 }
 
 .toggle-icon {

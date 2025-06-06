@@ -45,7 +45,8 @@
   background-color: #2492fc;
   color: white;
   border: none;
-  padding: 12px;
+  width: max-content;
+  padding: 10px 16px;
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;

@@ -5,7 +5,7 @@ import AuthLayout from "../components/Auth/AuthLayout";
 import PasswordInput from "../components/Auth/PasswordInput";
 import { useAuth } from "../context/AuthContext";
 import { useNotification } from "../context/NotificationContext";
-import { handleApiError } from "../utils/errorHandler"; 
+import { handleApiError } from "../utils/errorHandler";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -47,9 +47,13 @@ const Login = () => {
           showPassword={showPassword}
           toggle={() => setShowPassword(!showPassword)}
         />
-        <button type="submit" className="login-btn">
-          Login
-        </button>
+
+        <div className="button-container">
+          <button type="submit" className="login-btn">
+            Login
+          </button>
+        </div>
+
         <p className="signup-link">
           Don’t have an account? <Link to="/signup">Sign Up</Link>
         </p>

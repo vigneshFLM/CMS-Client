@@ -20,7 +20,7 @@
 .signUp-form h2 {
   font-size: 26px;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   text-align: center;
 }
 
@@ -84,7 +84,7 @@
   right: 12px;
   top: 45%;
   transform: translateY(-50%);
-  pointer-events: none; /* allows clicking the select underneath */
+  pointer-events: none; 
   color: #888;
 }
 
@@ -100,7 +100,7 @@
   background-color: #2492fc;
   color: white;
   border: none;
-  padding: 12px;
+  padding: 10px 16px;
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;

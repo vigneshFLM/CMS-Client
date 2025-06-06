@@ -7,7 +7,6 @@ import "../../styles/Auth/SignUp.css";
 const AuthLayout = ({ children, image }) => (
   <div className="auth-page">
     <div className="auth-container">
-      <div className="curve-top-right"></div>
       <div className="auth-left">
         <h1>
           Welcome To <br />
