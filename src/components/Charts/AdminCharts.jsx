@@ -35,12 +35,18 @@ const AdminCharts = ({ stats }) => {
   return (
     <>
       <div className="stat-cards">
-        <StatCard title="Total Users" value={stats.managedUsers} />
+        <StatCard title="Managed Users" value={stats.managedUsers} />
         <StatCard
           title="Created Credentials"
           value={stats.createdCredentials}
+          color="#dc3545"
         />
         <StatCard
+          title="Granted Accesses"
+          value={stats.grantedAccess}
+          color="#28a745"
+        />
+        {/* <StatCard
           title="Verified"
           value={stats.reviewedRequests.approved}
           color="#28a745"
@@ -49,7 +55,7 @@ const AdminCharts = ({ stats }) => {
           title="Unverified"
           value={stats.reviewedRequests.rejected}
           color="#ffc107"
-        />
+        /> */}
       </div>
 
       <div className="chart-wrapper">

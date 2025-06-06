@@ -35,9 +35,9 @@ const SuperAdminCharts = ({ stats }) => {
     <>
       <div className="stat-cards">
         <StatCard title="Total Users" value={stats.users} />
-        <StatCard title="Total Admins" value={stats.admins} />
-        <StatCard title="Credentials" value={stats.credentials} />
-        <StatCard
+        <StatCard title="Total Admins" value={stats.admins} color="#dc3545" />
+        <StatCard title="Credentials" value={stats.credentials} color="#28a745" />
+        {/* <StatCard
           title="Active Access"
           value={stats.activeAccess}
           color="#28a745"
@@ -46,7 +46,7 @@ const SuperAdminCharts = ({ stats }) => {
           title="Revoked Access"
           value={stats.revokedAccess}
           color="#dc3545"
-        />
+        /> */}
       </div>
 
       <div className="chart-wrapper">

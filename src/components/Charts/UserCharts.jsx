@@ -47,7 +47,7 @@ const UserCharts = ({ stats }) => {
   return (
     <div className="stats-container">
       <div className="stat-cards">
-        <StatCard title="Total Credentials" value={totalCredentials} />
+        {/* <StatCard title="Total Credentials" value={totalCredentials} /> */}
         <StatCard title="Active Credentials" value={active} color="#28a745" />
         <StatCard title="Revoked Credentials" value={revoked} color="#dc3545" />
         {/* <StatCard title="Approved Requests" value={approved} color="#007bff" />
