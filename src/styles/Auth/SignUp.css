@@ -1,0 +1,130 @@
+/* Base Styles for Small Screens (Mobile-first) */
+.signUp-form {
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+  padding: 20px;
+  /* background: #fff; */
+  border-radius: 12px;
+}
+
+.signUpForm-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.signUp-form h2 {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.signUp-form label {
+  font-weight: 500;
+  margin: 10px 0 5px;
+  display: block;
+}
+
+.signUp-form input,
+.signUp-form select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-family: inherit;
+  margin-bottom: 10px;
+}
+
+.signUp-form select {
+  background-color: white;
+  appearance: none;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.signUp-form select:focus,
+.signUp-form input:focus {
+  outline: none;
+  border-color: #2492fc;
+  box-shadow: 0 0 3px rgba(36, 146, 252, 0.5);
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 13px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.select-wrapper .select-icon {
+  position: absolute;
+  right: 12px;
+  top: 45%;
+  transform: translateY(-50%);
+  pointer-events: none; /* allows clicking the select underneath */
+  color: #888;
+}
+
+.toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 45%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.signUp-btn {
+  background-color: #2492fc;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  width: max-content;
+  margin-top: 10px;
+}
+
+.signUp-btn:hover {
+  background-color: #1e80e0;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #2492fc;
+  text-decoration: none;
+}
+
+@media (max-width: 992px) {
+  .signUpForm-container {
+    grid-template-columns: 1fr;
+  }
+}

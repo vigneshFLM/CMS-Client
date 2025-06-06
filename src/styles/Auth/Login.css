@@ -1,0 +1,68 @@
+/* Base Styles for Small Screens (Mobile-first) */
+.login-form {
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 20px;
+}
+
+.login-form h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.login-form label {
+  margin: 10px 0 5px;
+  font-weight: 500;
+}
+
+.login-form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.login-options a {
+  text-decoration: none;
+  color: #2492fc;
+}
+
+.login-btn {
+  background-color: #2492fc;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.login-btn:hover {
+  background-color: #1e80e0;
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.signup-link a {
+  color: #2492fc;
+  text-decoration: none;
+}

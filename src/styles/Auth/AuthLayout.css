@@ -1,0 +1,187 @@
+/* Base Styles for Small Screens (Mobile-first) */
+.auth-page {
+  background: linear-gradient(
+    to bottom,
+    #2492fc 0%,
+    #2492fc 50%,
+    #fff 50%,
+    #fff 100%
+  );
+}
+
+.auth-container {
+  display: flex;
+  flex-direction: column;  /* Start with column for mobile */
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.auth-left {
+  flex: 1;
+  background-color: #2492fc;
+  color: white;
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.auth-left h1 {
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.auth-left img {
+  max-width: 80%;
+  height: auto;
+}
+
+.auth-right {
+  flex: 1;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 35px; /* Add space for the icon */
+}
+
+.login-form input,
+.password-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.toggle-icon {
+  position: absolute;
+  top: 45%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  margin: 0;
+}
+
+/* Media Queries */
+
+/* For Tablets (Portrait or Landscape) */
+@media (min-width: 768px) {
+  .auth-container {
+    flex-direction: row; /* Switch to row layout */
+  }
+
+  .auth-left {
+    padding: 30px;
+    border-bottom-right-radius: 30px;
+  }
+
+  .auth-left h1 {
+    font-size: 35px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+
+  .auth-left img {
+    max-width: 60%;
+  }
+
+  .auth-right {
+    padding: 25px;
+  }
+
+  .password-wrapper input {
+    padding-right: 30px;
+  }
+
+  .login-form input,
+  .password-wrapper input {
+    padding: 14px;
+  }
+}
+
+/* For Desktops */
+@media (min-width: 992px) {
+  .auth-container {
+    flex-direction: row; /* Row layout for desktops */
+    height: 100vh;
+  }
+
+  .auth-left {
+    padding: 40px;
+    border-bottom-right-radius: 50px;
+  }
+
+  .auth-left h1 {
+    font-size: 45px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+  }
+
+  .auth-left img {
+    max-width: 50%;
+  }
+
+  .auth-right {
+    padding: 40px;
+  }
+
+  .password-wrapper input {
+    padding-right: 35px;
+  }
+
+  .login-form input,
+  .password-wrapper input {
+    padding: 16px;
+  }
+}
+
+/* For Large Desktops */
+@media (min-width: 1200px) {
+  .auth-container {
+    flex-direction: row; /* Keep row layout for large desktops */
+    height: 100vh;
+  }
+
+  .auth-left {
+    padding: 50px;
+    border-bottom-right-radius: 70px;
+  }
+
+  .auth-left h1 {
+    font-size: 50px;
+    margin-top: 60px;
+    margin-bottom: 30px;
+  }
+
+  .auth-left img {
+    max-width: 45%;
+  }
+
+  .auth-right {
+    padding: 50px;
+  }
+
+  .password-wrapper input {
+    padding-right: 40px;
+  }
+
+  .login-form input,
+  .password-wrapper input {
+    padding: 18px;
+  }
+}
