@@ -84,13 +84,13 @@ export const handleApiError = (err, showNotification, fallbackMsg = "Something w
 
     // 📊 Stats / Misc
     case "NO_MAPPINGS":
-      showNotification("No credential mappings found.", "info");
+      showNotification("No credentials found.", "info");
       break;
     case "NO_USERS":
-      showNotification("No users found for this credential.", "info");
+      showNotification("No users found.", "info");
       break;
     case "NO_CREDENTIALS":
-      showNotification("This user has no credentials.", "info");
+      showNotification("No credentials accessed.", "info");
       break;
     case "STATS_FETCH_FAILED":
       showNotification("Unable to load dashboard stats.", "error");
