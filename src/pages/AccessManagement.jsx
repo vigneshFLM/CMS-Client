@@ -7,7 +7,8 @@ import Pagination from "../components/Pagination";
 import usePagination from "../hooks/usePagination";
 import { useNotification } from "../context/NotificationContext";
 import { handleApiError } from "../utils/errorHandler";
-import ConfirmationOverlay from "../components/ConfirmationOverlay"; // Import the overlay
+import ConfirmationOverlay from "../components/ConfirmationOverlay";
+import { useAuth } from "../context/AuthContext";
 
 const AccessManagement = () => {
   const [data, setData] = useState([]);
@@ -22,15 +23,22 @@ const AccessManagement = () => {
   const [overlayData, setOverlayData] = useState(null);
 
   const { showNotification } = useNotification();
+  const { user } = useAuth();
 
   const rowsPerPage = 10;
 
   useEffect(() => {
     const fetchMappings = async () => {
       try {
-        const response = await AccessAPI.getAllAccess();
-        setData(response.data);
-        setFiltered(response.data);
+        if (user.role === "super-admin") {
+          const response = await AccessAPI.getAllAccess();
+          setData(response.data);
+          setFiltered(response.data);
+        } else if (user.role === "admin") {
+          const response = await AccessAPI.getAccessAdminUsers(user.id);
+          setData(response.data);
+          setFiltered(response.data);
+        }
       } catch (err) {
         handleApiError(
           err,

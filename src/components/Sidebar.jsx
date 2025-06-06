@@ -46,7 +46,7 @@ const Sidebar = () => {
       path: "/access-management",
       icon: <IconLockAccess size={18} />,
       label: "Access Management",
-      roles: ["super-admin"],
+      roles: ["super-admin", "admin"],
     },
     {
       path: "/approvals-Requests",

@@ -60,9 +60,7 @@ const Users = () => {
         setManagers(managersRes.data);
       } else if (user.role === "admin") {
         // Admin fetches only users managed by them
-        const [usersRes, managersRes] = await Promise.all([
-          api.get(`/users/admin/${user.id}/users`),
-        ]);
+        const [usersRes] = await Promise.all([userApi.fetchByAdmin(user.id)]);
         setUsers(usersRes.data);
         setFiltered(usersRes.data);
       }
