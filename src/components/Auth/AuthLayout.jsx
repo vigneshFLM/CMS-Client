@@ -1,20 +1,21 @@
 // src/components/Auth/AuthLayout.jsx
 import React from "react";
-import "../../styles/Login.css";
-import "../../styles/SignUp.css";
+import "../../styles/Auth/AuthLayout.css";
+import "../../styles/Auth/Login.css";
+import "../../styles/Auth/SignUp.css";
 
 const AuthLayout = ({ children, image }) => (
-  <div className="login-page">
-    <div className="login-container">
+  <div className="auth-page">
+    <div className="auth-container">
       <div className="curve-top-right"></div>
-      <div className="login-left">
+      <div className="auth-left">
         <h1>
           Welcome To <br />
           Frontlines Edutech
         </h1>
         <img src={image} alt="illustration" />
       </div>
-      <div className="login-right">{children}</div>
+      <div className="auth-right">{children}</div>
     </div>
   </div>
 );
