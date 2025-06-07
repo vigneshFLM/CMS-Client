@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import "../styles/Layout.css"; // Add this to handle layout styling
+import "../styles/Layout.css";
 
 const MainLayout = ({ children }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
