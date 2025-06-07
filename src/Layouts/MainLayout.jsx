@@ -1,23 +1,24 @@
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import "../styles/Layout.css"; // Add this to handle layout styling
 
 const MainLayout = ({ children }) => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const isMobile = windowWidth <= 768;
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <>
       <Navbar />
       <Sidebar />
       <main
-        style={{
-          position: "fixed",
-          top: "60px",            // height of Navbar
-          left: "250px",          // width of Sidebar
-          right: 0,
-          bottom: 0,
-          padding: "2rem",
-          backgroundColor: "#f0f2f5",
-          overflowY: "auto",
-          overflowX: "hidden",
-        }}
+        className={`main-content ${isMobile ? "mobile" : "desktop"}`}
       >
         {children}
       </main>

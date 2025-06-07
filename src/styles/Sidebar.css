@@ -4,9 +4,15 @@
   color: white;
   height: 100vh;
   position: fixed;
+  top: 0;
+  left: 0;
   padding: 20px;
   z-index: 1000;
-  top: 0;
+  transition: left 0.3s ease;
+}
+
+.sidebar.open {
+  left: 0;
 }
 
 .logo-section {
@@ -15,23 +21,7 @@
 }
 
 .logo {
-  width: auto;
   height: 60px;
-}
-
-.brand-title {
-  font-size: 16px;
-  margin-top: 8px;
-  font-weight: bold;
-}
-
-.brand-title span {
-  color: #ffcc00;
-}
-
-.tagline {
-  font-size: 10px;
-  margin-top: 4px;
 }
 
 .menu a {
@@ -42,16 +32,73 @@
   text-decoration: none;
   border-radius: 8px;
   margin: 10px 0;
-  transition: background 0.2s;
+  transition: 0.2s;
 }
 
 .menu a.active,
 .menu a:hover {
-  background-color: #ffffff;
+  background-color: white;
   color: #0074d9;
 }
 
 .menu a span {
   margin-left: 10px;
   font-size: 14px;
+}
+
+.hamburger-btn {
+  display: none;
+  position: fixed;
+  top: 85px;
+  left: 15px;
+  background: transparent;
+  border: none;
+  z-index: 1200;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.hamburger-btn.closed {
+  color: #0074d9;
+}
+
+/* Color when sidebar is open */
+.hamburger-btn.open {
+  color: white;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .sidebar {
+    left: -250px;
+    width: 200px;
+    padding: 15px;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .hamburger-btn {
+    display: block;
+  }
+
+  .logo-section {
+    margin-bottom: 50px;
+  }
+
+  .menu a {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .menu a span {
+    margin-left: 8px;
+    font-size: 12px;
+  }
+
+  .logo {
+    height: 50px;
+  }
 }

@@ -1,8 +1,22 @@
+:root {
+  --form-bg: #ffffff;
+  --form-padding: clamp(1rem, 4vw, 2rem);
+  --form-radius: 8px;
+  --input-padding: 10px;
+  --btn-radius: 4px;
+  --primary-color: #1976d2;
+  --primary-hover: #1565c0;
+  --danger-color: #d32f2f;
+  --danger-hover: #b71c1c;
+  --input-border: #ccc;
+  --text-color: #333;
+}
+
 /* ---------- Overlay & Form Container ---------- */
 .overlay {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 100px;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
@@ -10,40 +24,60 @@
   justify-content: center;
   align-items: center;
   z-index: 999;
+  padding: 1rem;
 }
 
 .add-form-floating {
-  background: white;
-  padding: 25px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 400px;
+  background: var(--form-bg);
+  padding: var(--form-padding);
+  border-radius: var(--form-radius);
+  width: 100%;
+  max-width: 420px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
 }
 
-/* ---------- Form Inputs ---------- */
+/* ---------- Form Elements ---------- */
 .add-form-floating input,
 .add-form-floating textarea,
 .add-form-floating select {
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: var(--input-padding);
+  border: 1px solid var(--input-border);
   border-radius: 4px;
   font-size: 14px;
   width: 100%;
   box-sizing: border-box;
 }
 
-/* ---------- Form Titles ---------- */
+.add-form-floating select[name="role"],
+.add-form-floating select[name="manager_id"] {
+  appearance: none;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 6px;
+  color: var(--text-color);
+}
+
+/* Focus styles */
+.add-form-floating select:focus,
+.add-form-floating input:focus,
+.add-form-floating textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  outline: none;
+}
+
+/* ---------- Titles ---------- */
 .form-title,
 .overlay-title,
 .view-title {
   text-align: center;
   font-weight: 600;
-  font-size: 20px;
+  font-size: clamp(1rem, 1.2vw, 1.25rem);
   margin-bottom: 10px;
+  color: var(--text-color);
 }
 
 /* ---------- Buttons ---------- */
@@ -51,75 +85,65 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 16px;
+  margin-top: 1rem;
+  flex-wrap: wrap;
 }
 
 .floating-buttons button {
   padding: 8px 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--btn-radius);
   cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .floating-buttons button:first-child {
-  background-color: #1976d2;
+  background-color: var(--primary-color);
   color: white;
 }
 
 .floating-buttons button:first-child:hover {
-  background-color: #1565c0;
+  background-color: var(--primary-hover);
 }
 
 .floating-buttons button:last-child,
 .close-button {
-  background-color: #d32f2f;
+  background-color: var(--danger-color);
   color: white;
 }
 
-.close-button:hover {
-  background-color: #b71c1c;
+.close-button:hover,
+.floating-buttons button:last-child:hover {
+  background-color: var(--danger-hover);
 }
 
-/* ---------- Select Styling ---------- */
-.add-form-floating select[name="role"],
-.add-form-floating select[name="manager_id"] {
-  appearance: none;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 14px;
-  color: #333;
-  background-size: 14px;
-  cursor: pointer;
-}
-
-.add-form-floating select:focus {
-  border-color: #1976d2;
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
-  outline: none;
-}
-
-/* ---------- Icon Buttons ---------- */
-.icon-button,
-.copy-icon,
-.toggle-eye-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
+/* ---------- Form Layouts ---------- */
+.form-group {
   display: flex;
-  align-items: center;
-}
-
-/* ---------- Password Input Flex Wrapper ---------- */
-.password-input-container {
-  display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 4px;
 }
 
-/* ---------- View Mode Field Layout ---------- */
+.form-label {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.input-with-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  word-break: break-word;
+}
+
+.password-input-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .view-field {
   display: flex;
   justify-content: space-between;
@@ -141,25 +165,56 @@
   flex: 1;
 }
 
-/* ---------- Form Group ---------- */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.form-label {
-  color: black;
-}
-
-.input-with-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  word-break: break-word;
-}
-
 .form-value {
   word-break: break-word;
+}
+
+/* ---------- Icon Buttons ---------- */
+.icon-button,
+.copy-icon,
+.toggle-eye-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  color: var(--primary-color);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .overlay {
+    left: 0;
+    padding: 0.5rem;
+  }
+
+  .add-form-floating {
+    padding: 1rem;
+    max-width: 60%;
+    border-radius: 6px;
+    gap: 0.75rem;
+  }
+
+  .floating-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .floating-buttons button {
+    width: 100%;
+  }
+
+  .view-field,
+  .view-value-with-actions,
+  .input-with-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .password-input-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }

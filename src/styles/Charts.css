@@ -1,31 +1,35 @@
-.dashboard-title {
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
+:root {
+  --primary-color: #007bff;
+  --card-radius: 12px;
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --padding-sm: 1rem;
+  --padding-md: 1.5rem;
+  --padding-lg: 2rem;
 }
 
-/* Stat Card Section */
+/* Stat Cards Container */
 .stat-cards {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 2rem;
+  justify-content: space-between;
 }
 
+/* Individual Stat Card */
 .stat-card {
-  flex: 1 1 150px;
-  min-width: 150px;
-  padding: 1rem 1.5rem;
-  border: 2px solid #007bff;
-  border-radius: 12px;
+  flex: 1 1 calc(25% - 1rem);
+  min-width: 200px;
+  padding: var(--padding-sm) var(--padding-md);
+  border: 2px solid var(--primary-color);
+  border-radius: var(--card-radius);
   text-align: center;
   font-weight: 600;
-  font-size: 1.1rem;
-  color: #007bff;
+  font-size: clamp(0.95rem, 1vw + 0.5rem, 1.2rem);
+  color: var(--primary-color);
   background-color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
   transition: transform 0.2s ease;
-  cursor: default;
 }
 
 .stat-card:hover {
@@ -34,28 +38,67 @@
 
 .stat-value {
   margin-top: 0.5rem;
-  font-size: 2rem;
+  font-size: clamp(1.4rem, 2vw + 1rem, 2.2rem);
   font-weight: 700;
 }
 
-/* Chart Section */
+/* Chart Container Grid */
 .chart-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
+/* Chart Box Styling */
 .chart-box {
-  flex: 1 1 400px;
-  /* max-width: 420px; */
-  max-height: 360px;
   background-color: #fff;
-  padding: 1.25rem;
-  border-radius: 12px;
+  padding: var(--padding-md);
+  border-radius: var(--card-radius);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   display: flex;
-  align-items: last baseline;
+  align-items: center;
   justify-content: center;
+  height: 320px;
+  max-width: 100%;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .stat-cards {
+    flex-direction: column;
+  }
+
+  .stat-card {
+    flex: 1 1 100%;
+    font-size: 1rem;
+  }
+
+  .chart-box {
+    height: auto;
+    padding: var(--padding-sm);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .stat-card {
+    flex: 1 1 calc(50% - 1rem);
+  }
+
+  .chart-box {
+    height: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .stat-cards {
+    gap: 2rem;
+  }
+
+  .chart-wrapper {
+    gap: 2rem;
+  }
+
+  .chart-box {
+    padding: var(--padding-lg);
+  }
 }

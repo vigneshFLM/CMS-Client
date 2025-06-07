@@ -7,14 +7,14 @@ import {
 import "../styles/Navbar.css";
 import { useAuth } from "../context/AuthContext";
 import { useNotification } from "../context/NotificationContext";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { user } = useAuth();
   const { showNotification } = useNotification();
-  const navigate = useNavigate(); // Use useNavigate for navigation
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -29,34 +29,37 @@ const Navbar = () => {
   const handleLogout = () => {
     showNotification("Logging out!", "success");
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    navigate("/login");
   };
 
   const handleProfile = () => {
     showNotification("Redirecting to profile!", "info");
-    navigate("/profile"); // Use navigate for profile redirection
+    navigate("/profile");
   };
 
   return (
-    <div className="navbar">
+    <header className="navbar">
       <div className="navbar-left">
         <h2>
-          Welcome to Frontlines Edutech <span>{user.name}</span>
+          Welcome to Frontlines Edutech <span>{user?.name}</span>
         </h2>
       </div>
+
       <div className="navbar-right">
+        {/* Uncomment if notifications are used */}
         {/* <div className="notification-icon">
-          <IconBell size={25} />
+          <IconBell size={22} />
         </div> */}
+
         <div
           className="profile-icon"
           onClick={() => setDropdownOpen(!dropdownOpen)}
           ref={dropdownRef}
         >
-          <IconUserCircle size={24} />
-          <span className="user-name">{user.name}</span>
+          <IconUserCircle size={22} />
+          <span className="user-name">{user?.name}</span>
           <IconCaretDownFilled
-            size={18}
+            size={16}
             className={`caret-icon ${dropdownOpen ? "rotated" : ""}`}
           />
 
@@ -72,7 +75,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
