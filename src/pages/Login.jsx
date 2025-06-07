@@ -24,7 +24,7 @@ const Login = () => {
       navigate("/dashboard");
     } catch (err) {
       handleApiError(err, showNotification, "Login failed");
-      showNotification("Login failed!", "error");
+      showNotification("Login failed! Incorrect Username or Password", "error");
     }
   };
 
