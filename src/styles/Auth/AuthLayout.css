@@ -1,7 +1,7 @@
 /* Base Styles for Small Screens (Mobile-first) */
 .auth-page {
   background: linear-gradient(
-    to bottom,
+    to right,
     #2492fc 0%,
     #2492fc 50%,
     #fff 50%,
@@ -11,7 +11,7 @@
 
 .auth-container {
   display: flex;
-  flex-direction: column; /* Start with column for mobile */
+  flex-direction: column;
   height: auto;
   margin: 0;
   padding: 0;
@@ -28,6 +28,7 @@
   align-items: center;
   text-align: center;
   border-bottom-right-radius: 80px;
+  border-bottom-right-radius: 80px;
 }
 
 .auth-left h1 {
@@ -37,8 +38,8 @@
   margin-bottom: 15px;
 }
 
-.auth-left img {
-  max-width: 80%;
+.auth-left-image {
+  width: 80%;
   height: auto;
 }
 
@@ -81,12 +82,9 @@
   margin: 0;
 }
 
-/* Media Queries */
-
-/* For Tablets (Portrait or Landscape) */
 @media (min-width: 768px) {
   .auth-container {
-    flex-direction: row; /* Switch to row layout */
+    flex-direction: row;
   }
 
   .auth-left {
@@ -121,7 +119,7 @@
 /* For Desktops */
 @media (min-width: 992px) {
   .auth-container {
-    flex-direction: row; /* Row layout for desktops */
+    flex-direction: row;
     height: 100vh;
   }
 
@@ -156,6 +154,15 @@
 
 /* For Large Desktops */
 @media (min-width: 1200px) {
+  .auth-page {
+    background: linear-gradient(
+      to bottom,
+      #2492fc 0%,
+      #2492fc 50%,
+      #fff 50%,
+      #fff 100%
+    );
+  }
   .auth-container {
     flex-direction: row; /* Keep row layout for large desktops */
     height: 100vh;
@@ -168,12 +175,11 @@
 
   .auth-left h1 {
     font-size: 50px;
-    margin-top: 60px;
-    margin-bottom: 30px;
+    margin-top: 50px;
   }
 
   .auth-left img {
-    max-width: 45%;
+    max-width: 65%;
   }
 
   .auth-right {

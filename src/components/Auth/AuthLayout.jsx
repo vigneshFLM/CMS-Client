@@ -12,7 +12,7 @@ const AuthLayout = ({ children, image }) => (
           Welcome To <br />
           Frontlines Edutech
         </h1>
-        <img src={image} alt="illustration" />
+        <img className="auth-left-image" src={image} alt="illustration" />
       </div>
       <div className="auth-right">{children}</div>
     </div>

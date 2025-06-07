@@ -29,7 +29,7 @@ const Navbar = () => {
   const handleLogout = () => {
     showNotification("Logging out!", "success");
     localStorage.removeItem("token");
-    navigate("/login");
+    window.location.href = "/login";
   };
 
   const handleProfile = () => {
