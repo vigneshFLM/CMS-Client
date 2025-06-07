@@ -1,6 +1,19 @@
 @import "./Overlay.css";
 
-/* ---------- Global Styles ---------- */
+/* ---------- Global Variables ---------- */
+:root {
+  --primary-color: #1976d2;
+  --primary-hover: #1565c0;
+  --danger-color: #f44336;
+  --danger-hover: #d32f2f;
+  --success-color: #2e7d32;
+  --success-hover: #1b5e20;
+  --gray-bg: rgba(0, 0, 0, 0.04);
+  --gray-hover: rgba(0, 0, 0, 0.08);
+  --border-radius: 10px;
+}
+
+/* ---------- Base Styles ---------- */
 html,
 body {
   height: 100%;
@@ -22,26 +35,26 @@ body {
 
 .filters select,
 .filters input {
-  padding: 10px;
-  border-radius: 10px;
+  padding: clamp(0.6rem, 1.2vw, 0.75rem);
+  border-radius: var(--border-radius);
   border: 1px solid #ccc;
   min-width: 160px;
   background-color: #fff;
 }
 
-/* ---------- Search Input ---------- */
+/* ---------- Search ---------- */
 .search-input {
   padding: 10px;
   width: 300px;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* ---------- Table ---------- */
 .table-wrapper {
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
   box-shadow: 0 0 12px rgba(52, 46, 46, 0.08);
 }
 
@@ -49,7 +62,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   font-size: 15px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+  background-color: white;
 }
 
 .table th,
@@ -76,6 +89,7 @@ body {
   color: red;
   font-weight: 500;
   margin-bottom: 14px;
+  text-align: center;
 }
 
 /* ---------- Pagination ---------- */
@@ -83,16 +97,17 @@ body {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
 .pagination button {
-  margin: 0 5px;
   padding: 8px 12px;
   border: 1px solid #aaa;
   border-radius: 6px;
   background-color: white;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .pagination .active-page {
@@ -106,11 +121,11 @@ body {
   display: flex;
   gap: 8px;
   align-items: center;
-  /* justify-content: center; */
+  flex-wrap: wrap;
 }
 
 .action-button {
-  background-color: rgba(0, 0, 0, 0.04); /* subtle gray by default */
+  background-color: var(--gray-bg);
   border: none;
   cursor: pointer;
   padding: 6px;
@@ -123,39 +138,35 @@ body {
 
 .action-button:hover {
   transform: scale(1.1);
-  background-color: rgba(0, 0, 0, 0.08); /* slightly darker on hover */
+  background-color: var(--gray-hover);
 }
 
-/* Approve */
 .action-button.approve-icon {
-  background-color: #2e7d32;
+  background-color: var(--success-color);
   color: white;
 }
 
 .action-button.approve-icon:hover {
-  background-color: #1b5e20;
+  background-color: var(--success-hover);
 }
 
-/* Reject */
 .action-button.reject-icon {
-  background-color: #d32f2f;
+  background-color: var(--danger-color);
   color: white;
 }
 
 .action-button.reject-icon:hover {
-  background-color: #b71c1c;
+  background-color: var(--danger-hover);
 }
 
-/* View */
 .action-button.view-icon {
-  color: #1976d2;
+  color: var(--primary-color);
 }
 
 .action-button.view-icon:hover {
   color: #0d47a1;
 }
 
-/* Edit */
 .action-button.edit-icon {
   color: #ff9800;
 }
@@ -164,7 +175,6 @@ body {
   color: #ef6c00;
 }
 
-/* Delete */
 .action-button.delete-icon {
   color: #f44336;
 }
@@ -179,25 +189,26 @@ body {
   padding: 10px 16px;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   cursor: pointer;
   margin-left: 10px;
+  font-weight: 500;
 }
 
 .add-button {
-  background-color: #1976d2;
+  background-color: var(--primary-color);
 }
 
 .add-button:hover {
-  background-color: #1565c0;
+  background-color: var(--primary-hover);
 }
 
 .reset-button {
-  background-color: #f44336;
+  background-color: var(--danger-color);
 }
 
 .reset-button:hover {
-  background-color: #d32f2f;
+  background-color: var(--danger-hover);
 }
 
 /* ---------- Copy Icon ---------- */
@@ -206,5 +217,82 @@ body {
   border: none;
   margin-left: 8px;
   cursor: pointer;
-  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  color: var(--primary-color);
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 40px;
+    margin-right: 10px;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .pagination {
+    justify-content: center;
+  }
+
+  .action-buttons {
+    justify-content: center;
+  }
+
+  .add-button,
+  .reset-button {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+}
+
+/* ---------- Medium Screens (Tablets) ---------- */
+@media (min-width: 601px) and (max-width: 992px) {
+  .filters {
+    flex-direction: row;
+    justify-content: center;
+    margin: 20px;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .add-button,
+  .reset-button {
+    padding: 10px 14px;
+  }
+
+  .table th,
+  .table td {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .action-buttons {
+    justify-content: flex-start;
+  }
+}
+
+/* ---------- Large Screens ---------- */
+@media (min-width: 993px) {
+  .filters {
+    justify-content: center;
+    margin: 20px auto;
+    max-width: 1200px;
+  }
+
+  .search-input {
+    width: 350px;
+  }
+
+  .table {
+    font-size: 15px;
+  }
 }
