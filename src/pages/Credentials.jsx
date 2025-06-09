@@ -25,6 +25,7 @@ const Credentials = () => {
   const [editId, setEditId] = useState(null);
   const [showEditPassword, setShowEditPassword] = useState(false);
   const [showViewPassword, setShowViewPassword] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [credentialData, setCredentialData] = useState({
     name: "",
     username: "",
@@ -32,7 +33,10 @@ const Credentials = () => {
   });
 
   const [showOverlay, setShowOverlay] = useState(false);
-  const [overlayData, setOverlayData] = useState({ actionType: "", data: null });
+  const [overlayData, setOverlayData] = useState({
+    actionType: "",
+    data: null,
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
   const credentialsPerPage = 10;
@@ -41,12 +45,15 @@ const Credentials = () => {
   const { showNotification } = useNotification();
 
   const fetchCredentials = async () => {
+    setLoading(true);
     try {
       const res = await CredentialAPI.fetchByUserId(user.id);
       setCredentials(res.data);
       setFiltered(res.data);
     } catch (err) {
       handleApiError(err, showNotification, "Failed to load credentials");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,7 +109,9 @@ const Credentials = () => {
           break;
         case "deleteCred":
           await CredentialAPI.delete(data.credential_id);
-          setCredentials((prev) => prev.filter((c) => c.credential_id !== data.credential_id));
+          setCredentials((prev) =>
+            prev.filter((c) => c.credential_id !== data.credential_id)
+          );
           showNotification("Credential deleted successfully!", "success");
           break;
         default:
@@ -205,22 +214,32 @@ const Credentials = () => {
         setCopiedField={setCopiedField}
       />
 
-      <CredentialTable
-        credentials={currentCredentials}
-        onView={viewCredential}
-        onEdit={handleEdit}
-        userRole={user.role}
-        onDelete={(id) => {
-          const cred = credentials.find((c) => c.credential_id === id);
-          confirmAction("deleteCred", cred);
-        }}
-      />
-
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      {loading ? (
+        <div className="loading">
+          <span className="spinner" /> {/* Add your spinner here */}
+          <span>Loading credentials...</span>
+        </div>
+      ) : currentCredentials.length === 0 ? (
+        <p className="no-data">No credentials found.</p>
+      ) : (
+        <>
+          <CredentialTable
+            credentials={currentCredentials}
+            onView={viewCredential}
+            onEdit={handleEdit}
+            userRole={user.role}
+            onDelete={(id) => {
+              const cred = credentials.find((c) => c.credential_id === id);
+              confirmAction("deleteCred", cred);
+            }}
+          />
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      )}
 
       <ConfirmationOverlay
         show={showOverlay}

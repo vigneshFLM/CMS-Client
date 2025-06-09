@@ -124,9 +124,10 @@ const ApprovalsRequests = () => {
 
       {loading ? (
         <div className="loading">
-          <IconLoader2 className="spin" size={24} />
           <span>Loading requests...</span>
         </div>
+      ) : currentRequests.length === 0 ? (
+        <p className="no-data">No requests found.</p>
       ) : (
         <>
           <ApprovalsTable

@@ -23,6 +23,8 @@ const Users = () => {
   const [editId, setEditId] = useState(null);
   const [roles] = useState(["user", "admin"]);
   const [managers, setManagers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
@@ -48,9 +50,9 @@ const Users = () => {
 
   // Fetch users based on role (super-admin or admin)
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       if (user.role === "super-admin") {
-        // Super-admin fetches all users
         const [usersRes, managersRes] = await Promise.all([
           userApi.fetchAll(),
           userApi.fetchManagers(),
@@ -59,13 +61,14 @@ const Users = () => {
         setFiltered(usersRes.data);
         setManagers(managersRes.data);
       } else if (user.role === "admin") {
-        // Admin fetches only users managed by them
         const [usersRes] = await Promise.all([userApi.fetchByAdmin(user.id)]);
         setUsers(usersRes.data);
         setFiltered(usersRes.data);
       }
     } catch (err) {
       handleApiError(err, showNotification, "Failed to fetch users/managers");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -199,22 +202,32 @@ const Users = () => {
         />
       )}
 
-      <UserTable
-        users={currentUsers}
-        userRole={user.role}
-        indexOfFirstUser={indexOfFirstUser}
-        onEdit={handleEdit}
-        onDelete={(id) => {
-          const user = users.find((u) => u.id === id);
-          confirmAction("deleteUser", user);
-        }}
-      />
-
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      {loading ? (
+        <div className="loading">
+          <span className="spinner" />
+          <span>Loading users...</span>
+        </div>
+      ) : currentUsers.length === 0 ? (
+        <p className="no-data">No users found.</p>
+      ) : (
+        <>
+          <UserTable
+            users={currentUsers}
+            userRole={user.role}
+            indexOfFirstUser={indexOfFirstUser}
+            onEdit={handleEdit}
+            onDelete={(id) => {
+              const user = users.find((u) => u.id === id);
+              confirmAction("deleteUser", user);
+            }}
+          />
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      )}
 
       <ConfirmationOverlay
         show={showOverlay}

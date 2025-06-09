@@ -130,18 +130,28 @@ const AccessManagement = () => {
         resetFilters={resetFilters}
       />
 
-      <AccessTable
-        entries={currentEntries}
-        onRevoke={confirmRevoke} // Use confirmRevoke instead of handleRevoke directly
-        revokingId={revokingId}
-        indexOfFirst={indexOfFirst}
-      />
-
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      {loading ? (
+        <div className="loading">
+          <span className="spinner" />
+          <span>Loading access data...</span>
+        </div>
+      ) : currentEntries.length === 0 ? (
+        <p className="no-data">No access data found.</p>
+      ) : (
+        <>
+          <AccessTable
+            entries={currentEntries}
+            onRevoke={confirmRevoke}
+            revokingId={revokingId}
+            indexOfFirst={indexOfFirst}
+          />
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      )}
 
       <ConfirmationOverlay
         show={showOverlay}
