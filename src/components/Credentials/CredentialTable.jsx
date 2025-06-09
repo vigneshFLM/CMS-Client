@@ -14,7 +14,7 @@ const CredentialTable = ({
         <tr>
           <th>S.no</th>
           <th>Name</th>
-          <th>Created By</th>
+          <th>Granted By</th>
           <th>Granted At</th>
           <th>Actions</th>
         </tr>
