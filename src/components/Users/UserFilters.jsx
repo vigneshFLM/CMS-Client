@@ -11,6 +11,7 @@ const UserFilters = ({
   accessFilter,
   setAccessFilter,
   resetFilters,
+  userRole,
   showForm,
   setShowForm,
 }) => {
@@ -64,9 +65,11 @@ const UserFilters = ({
         <button className="reset-button" onClick={resetFilters}>
           Reset Filters
         </button>
-        <button className="add-button" onClick={() => setShowForm(true)}>
-          {showForm ? "Close Form" : "Add User"}
-        </button>
+        {userRole === "super-admin" && (
+          <button className="add-button" onClick={() => setShowForm(true)}>
+            {showForm ? "Close Form" : "Add User"}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -158,6 +158,7 @@ const Users = () => {
         search={search}
         setSearch={setSearch}
         roleFilter={roleFilter}
+        userRole={user.role}
         setRoleFilter={setRoleFilter}
         managerFilter={managerFilter}
         managers={managers}
