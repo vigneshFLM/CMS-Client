@@ -107,6 +107,7 @@ body {
   gap: 6px;
   padding: 8px;
   font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
   border: 1px solid #ddd;
   background-color: white;
@@ -115,7 +116,8 @@ body {
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background-color: #f0f0f0;
+  background-color: #1976d2;
+  color: white;
 }
 
 .pagination-btn:disabled {
