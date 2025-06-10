@@ -154,7 +154,7 @@ const SignUp = () => {
                 <option value="">Select Role</option>
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
-                <option value="super-admin">Super Admin</option>
+                {/* <option value="super-admin">Super Admin</option> */}
               </select>
               <IconChevronDown className="select-icon" size={18} />
             </div>
