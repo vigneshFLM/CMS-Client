@@ -9,6 +9,7 @@ const Dashboard = () => {
   const { token, user } = useAuth();
   const { showNotification } = useNotification();
   const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -20,17 +21,24 @@ const Dashboard = () => {
         setStats(res.data);
       } catch (err) {
         handleApiError(err, showNotification, "Failed to load dashboard stats");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchStats();
   }, [user, token]);
 
-  if (!stats) return <p style={{ padding: "2rem" }}>Loading...</p>;
-
   return (
     <div style={{ padding: "2rem" }}>
-      <ChartRenderer role={user.role} stats={stats} />
+      {loading ? (
+        <div className="loading">
+          <span className="spinner" />
+          <span>Loading Dashboard Stats...</span>
+        </div>
+      ) : (
+        <ChartRenderer role={user.role} stats={stats} />
+      )}
     </div>
   );
 };
