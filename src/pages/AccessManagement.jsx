@@ -133,7 +133,7 @@ const AccessManagement = () => {
       {loading ? (
         <div className="loading">
           <span className="spinner" />
-          <span>Loading access data...</span>
+          <span>Loading Access Data...</span>
         </div>
       ) : currentEntries.length === 0 ? (
         <p className="no-data">No access data found.</p>
