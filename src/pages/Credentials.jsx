@@ -216,7 +216,7 @@ const Credentials = () => {
 
       {loading ? (
         <div className="loading">
-          <span className="spinner" /> {/* Add your spinner here */}
+          <span className="spinner" />
           <span>Loading credentials...</span>
         </div>
       ) : currentCredentials.length === 0 ? (

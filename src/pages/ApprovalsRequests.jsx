@@ -10,6 +10,7 @@ import { IconLoader2 } from "@tabler/icons-react";
 import { handleApiError } from "../utils/errorHandler";
 import { useAuth } from "../context/AuthContext";
 import ConfirmationOverlay from "../components/ConfirmationOverlay";
+import ApprovalRequestView from "../components/ApprovalsRequests/ApprovalsRequestView";
 
 const ApprovalsRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -21,7 +22,7 @@ const ApprovalsRequests = () => {
   const requestsPerPage = 10;
   const { user } = useAuth();
   const { showNotification } = useNotification();
-
+  const [viewingRequest, setViewingRequest] = useState(null);
   const currentUserId = user?.id || null;
 
   const [showOverlay, setShowOverlay] = useState(false);
@@ -87,6 +88,10 @@ const ApprovalsRequests = () => {
     setShowOverlay(true);
   };
 
+  const handleViewRequest = (request) => {
+    setViewingRequest(request);
+  };
+
   const handleOverlayConfirm = async () => {
     const { reqId, reqStatus, reqUserId, reqCredentialId } = overlayData;
     setShowOverlay(false);
@@ -124,6 +129,7 @@ const ApprovalsRequests = () => {
 
       {loading ? (
         <div className="loading">
+          <IconLoader2 className="loading-icon" size={24} />
           <span>Loading requests...</span>
         </div>
       ) : currentRequests.length === 0 ? (
@@ -134,6 +140,7 @@ const ApprovalsRequests = () => {
             requests={currentRequests}
             indexOfFirst={indexOfFirst}
             handleStatusUpdate={confirmStatusUpdate}
+            handleViewRequest={handleViewRequest}
           />
           <Pagination
             totalPages={totalPages}
@@ -142,6 +149,12 @@ const ApprovalsRequests = () => {
           />
         </>
       )}
+
+      <ApprovalRequestView
+        show={!!viewingRequest}
+        data={viewingRequest}
+        onClose={() => setViewingRequest(null)}
+      />
 
       <ConfirmationOverlay
         show={showOverlay}

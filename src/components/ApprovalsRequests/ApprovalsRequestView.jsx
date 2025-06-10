@@ -1,6 +1,6 @@
 import { IconX } from "@tabler/icons-react";
 
-const RequestView = ({ show, data, onClose }) => {
+const ApprovalRequestView = ({ show, data, onClose }) => {
   if (!show || !data) return null;
 
   return (
@@ -10,16 +10,16 @@ const RequestView = ({ show, data, onClose }) => {
 
         <div className="form-group">
           <label className="form-label">
-            <strong>Credential:</strong>
+            <strong>Credential: </strong>
+            <span className="form-value">{data.credential_name || "N/A"}</span>
           </label>
-          <div className="form-value">{data.credential_name || "N/A"}</div>
         </div>
 
         <div className="form-group">
           <label className="form-label">
-            <strong>Requested By:</strong>
+            <strong>Requested By: </strong>
+            <span className="form-value">{data.user_name || "N/A"}</span>
           </label>
-          <div className="form-value">{data.username || "N/A"}</div>
         </div>
 
         <div className="form-group">
@@ -32,20 +32,29 @@ const RequestView = ({ show, data, onClose }) => {
         {data.status && (
           <div className="form-group">
             <label className="form-label">
-              <strong>Status:</strong>
+              <strong>Status: </strong>
+              <span className="form-value">{data.status}</span>
             </label>
-            <div className="form-value">{data.status}</div>
+          </div>
+        )}
+
+        {data.reviewer_name && (
+          <div className="form-group">
+            <label className="form-label">
+              <strong>Reviewed By: </strong>
+              <span className="form-value">{data.reviewer_name}</span>
+            </label>
           </div>
         )}
 
         {data.created_at && (
           <div className="form-group">
             <label className="form-label">
-              <strong>Requested At:</strong>
+              <strong>Requested At: </strong>
+              <span className="form-value">
+                {new Date(data.created_at).toLocaleString()}
+              </span>
             </label>
-            <div className="form-value">
-              {new Date(data.created_at).toLocaleString()}
-            </div>
           </div>
         )}
 
@@ -62,4 +71,4 @@ const RequestView = ({ show, data, onClose }) => {
   );
 };
 
-export default RequestView;
+export default ApprovalRequestView;

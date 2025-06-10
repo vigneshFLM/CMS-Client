@@ -1,5 +1,11 @@
 import { handleCopy } from "../../utils/clipboardUtils";
-import { IconEye, IconEyeOff, IconCopy, IconCheck } from "@tabler/icons-react";
+import {
+  IconEye,
+  IconEyeOff,
+  IconCopy,
+  IconCheck,
+  IconX,
+} from "@tabler/icons-react";
 import "../../styles/Credentials.css";
 import { useNotification } from "../../context/NotificationContext";
 
@@ -22,7 +28,10 @@ const CredentialView = ({
 
   return (
     <div className="overlay">
-      <form className="add-form-floating" onSubmit={(e) => e.preventDefault()}>
+      <form
+        className="add-form-floating credential-form"
+        onSubmit={(e) => e.preventDefault()}
+      >
         <h3 className="form-title">Credential Details</h3>
 
         <div className="form-group">
@@ -38,22 +47,29 @@ const CredentialView = ({
           </label>
           <div className="input-with-actions">
             <span className="form-value">{username}</span>
-            {data.username && (
-              <button
-                type="button"
-                onClick={() =>
-                  handleCopy(username, setCopiedField, "username", showNotification)
-                }
-                className="icon-button copy-icon-button"
-                title="Copy Username"
-              >
-                {copiedField === "username" ? (
-                  <IconCheck size={18} color="#1976d2" />
-                ) : (
-                  <IconCopy size={18} color="#1976d2" />
-                )}
-              </button>
-            )}
+            <div className="icon-button-group">
+              {data.username && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleCopy(
+                      username,
+                      setCopiedField,
+                      "username",
+                      showNotification
+                    )
+                  }
+                  className="icon-button copy-icon-button"
+                  title="Copy Username"
+                >
+                  {copiedField === "username" ? (
+                    <IconCheck size={18} color="#1976d2" />
+                  ) : (
+                    <IconCopy size={18} color="#1976d2" />
+                  )}
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -70,7 +86,7 @@ const CredentialView = ({
                 : "N/A"}
             </span>
             {password && (
-              <>
+              <div className="icon-button-group">
                 <button
                   type="button"
                   onClick={togglePassword}
@@ -86,7 +102,12 @@ const CredentialView = ({
                 <button
                   type="button"
                   onClick={() =>
-                    handleCopy(password, setCopiedField, "password", showNotification)
+                    handleCopy(
+                      password,
+                      setCopiedField,
+                      "password",
+                      showNotification
+                    )
                   }
                   className="icon-button copy-icon-button"
                   title="Copy Password"
@@ -97,16 +118,19 @@ const CredentialView = ({
                     <IconCopy size={18} color="#1976d2" />
                   )}
                 </button>
-              </>
+              </div>
             )}
           </div>
         </div>
 
-        <div className="floating-buttons">
-          <button type="button" className="close-button" onClick={onClose}>
-            Close
-          </button>
-        </div>
+        <button
+          type="button"
+          className="icon-close-button"
+          onClick={onClose}
+          title="Close"
+        >
+          <IconX size={20} />
+        </button>
       </form>
     </div>
   );
