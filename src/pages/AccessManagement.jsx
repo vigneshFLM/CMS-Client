@@ -118,8 +118,6 @@ const AccessManagement = () => {
     indexOfFirst,
   } = usePagination(filtered, rowsPerPage);
 
-  if (loading) return <div>Loading access data...</div>;
-
   return (
     <div className="AccessManagement-container">
       <AccessFilters
