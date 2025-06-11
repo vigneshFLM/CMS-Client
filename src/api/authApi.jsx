@@ -8,6 +8,15 @@ const authApi = {
     api.post("/users/change-password", data, {
       headers: { Authorization: `Bearer ${token}` },
     }),
+
+  requestSuperAdminAccess: (reason, token) =>
+    api.post(
+      "/users/super-admin-request",
+      { reason },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    ),
 };
 
 export default authApi;

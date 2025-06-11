@@ -13,6 +13,7 @@ const Profile = () => {
   const [showChangeForm, setShowChangeForm] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [isRequesting, setIsRequesting] = useState(false);
 
   const handleCancelChange = () => {
     setOldPassword("");
@@ -24,7 +25,10 @@ const Profile = () => {
     e.preventDefault();
     try {
       await authApi.changePassword({ oldPassword, newPassword }, token);
-      showNotification("Password updated successfully! Logging out...", "success");
+      showNotification(
+        "Password updated successfully! Logging out...",
+        "success"
+      );
 
       setTimeout(() => {
         localStorage.removeItem("token");
@@ -32,6 +36,28 @@ const Profile = () => {
       }, 1500);
     } catch (err) {
       handleApiError(err, showNotification, "Failed to update password");
+    }
+  };
+
+  const handleRequestSuperAdmin = async () => {
+    if (!window.confirm("Are you sure you want to request Super Admin access?"))
+      return;
+
+    try {
+      setIsRequesting(true);
+      await authApi.requestSuperAdminAccess(
+        "Requesting super-admin access",
+        token
+      );
+      showNotification("Request submitted successfully!", "success");
+    } catch (err) {
+      handleApiError(
+        err,
+        showNotification,
+        "Failed to request super admin access"
+      );
+    } finally {
+      setIsRequesting(false);
     }
   };
 
@@ -51,6 +77,17 @@ const Profile = () => {
           Change Password
         </button>
       ) : null}
+
+      {user.role === "admin" && !showChangeForm && (
+        <button
+          className="change-password-button"
+          onClick={handleRequestSuperAdmin}
+          disabled={isRequesting}
+          style={{ marginLeft: "10px" }}
+        >
+          {isRequesting ? "Requesting..." : "Request Super Admin"}
+        </button>
+      )}
 
       {showChangeForm && (
         <ChangePasswordForm

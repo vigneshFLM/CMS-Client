@@ -95,11 +95,22 @@ const ApprovalsRequests = () => {
   const handleOverlayConfirm = async () => {
     const { reqId, reqStatus, reqUserId, reqCredentialId } = overlayData;
     setShowOverlay(false);
+
     try {
-      if (reqStatus === "approved") {
-        await AccessApi.grantAccess(reqUserId, reqCredentialId, currentUserId);
+      if (reqCredentialId === 1) {
+        await RequestsAPI.updateSuperAdminStatus(reqId, reqStatus);
+      } else {
+        // ✅ Regular access request
+        if (reqStatus === "approved") {
+          await AccessApi.grantAccess(
+            reqUserId,
+            reqCredentialId,
+            currentUserId
+          );
+        }
+        await RequestsAPI.updateStatus(reqId, reqStatus, currentUserId);
       }
-      await RequestsAPI.updateStatus(reqId, reqStatus, currentUserId);
+
       showNotification(`Request ${reqStatus}`, "success");
 
       const updated = await RequestsAPI.getAll();

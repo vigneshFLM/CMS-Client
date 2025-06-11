@@ -17,6 +17,9 @@ const requestApi = {
   delete: (id) => api.delete(`/requests/delete/${id}`),
 
   getCredentialNames: () => api.get("/credentials/names"),
+
+  updateSuperAdminStatus: (id, status) =>
+    api.patch(`/users/super-admin-requests/${id}`, { status }),
 };
 
 export default requestApi;
