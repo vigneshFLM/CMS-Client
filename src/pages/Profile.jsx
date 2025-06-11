@@ -49,7 +49,7 @@ const Profile = () => {
         "Requesting super-admin access",
         token
       );
-      showNotification("Request submitted successfully!", "success");
+      showNotification("Request for Super Admin submitted successfully!", "success");
     } catch (err) {
       handleApiError(
         err,
