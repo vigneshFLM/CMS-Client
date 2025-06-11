@@ -40,16 +40,16 @@ const Profile = () => {
   };
 
   const handleRequestSuperAdmin = async () => {
-    if (!window.confirm("Are you sure you want to request Super Admin access?"))
-      return;
-
     try {
       setIsRequesting(true);
       await authApi.requestSuperAdminAccess(
         "Requesting super-admin access",
         token
       );
-      showNotification("Request for Super Admin submitted successfully!", "success");
+      showNotification(
+        "Request for Super Admin submitted successfully!",
+        "success"
+      );
     } catch (err) {
       handleApiError(
         err,
