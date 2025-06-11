@@ -46,16 +46,16 @@ const AdminCharts = ({ stats }) => {
           value={stats.grantedAccess}
           color="#28a745"
         />
-        {/* <StatCard
-          title="Verified"
-          value={stats.reviewedRequests.approved}
-          color="#28a745"
+        <StatCard
+          title="Pending Requests"
+          value={stats.myRequests.pending}
+          color="#ffc107"
         />
         <StatCard
-          title="Unverified"
-          value={stats.reviewedRequests.rejected}
-          color="#ffc107"
-        /> */}
+          title="Rejected Requests"
+          value={stats.myRequests.rejected}
+          color="#6c757d"
+        />
       </div>
 
       <div className="chart-wrapper">
