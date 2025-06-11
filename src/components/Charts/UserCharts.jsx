@@ -50,9 +50,9 @@ const UserCharts = ({ stats }) => {
         {/* <StatCard title="Total Credentials" value={totalCredentials} /> */}
         <StatCard title="Active Credentials" value={active} color="#28a745" />
         <StatCard title="Revoked Credentials" value={revoked} color="#dc3545" />
-        {/* <StatCard title="Approved Requests" value={approved} color="#007bff" />
-        <StatCard title="Rejected Requests" value={rejected} color="#ffc107" /> */}
+        {/* <StatCard title="Approved Requests" value={approved} color="#007bff" /> */}
         <StatCard title="Pending Requests" value={pending} color="#6c757d" />
+        <StatCard title="Rejected Requests" value={rejected} color="#ffc107" />
       </div>
 
       <div className="chart-wrapper">
