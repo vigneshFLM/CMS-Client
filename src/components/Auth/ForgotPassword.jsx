@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import authApi from "../../api/authApi";
 import AuthLayout from "../Auth/AuthLayout";
 import { useNotification } from "../../context/NotificationContext";
+import { useNavigate } from "react-router-dom";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const { showNotification } = useNotification();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
