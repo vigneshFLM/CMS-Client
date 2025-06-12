@@ -17,6 +17,7 @@ export default function ForgotPassword() {
         "Check your email for a password reset link.",
         "success"
       );
+      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       const errorMsg = err.response?.data?.message || "Something went wrong.";
       showNotification(errorMsg, "error");
