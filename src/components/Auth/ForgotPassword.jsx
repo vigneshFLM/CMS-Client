@@ -14,7 +14,7 @@ export default function ForgotPassword() {
     try {
       await authApi.forgotPassword(email);
       showNotification(
-        "Check your inbox for a password reset link.",
+        "Check your email for a password reset link.",
         "success"
       );
     } catch (err) {
