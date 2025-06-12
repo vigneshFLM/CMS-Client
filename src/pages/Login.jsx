@@ -54,9 +54,14 @@ const Login = () => {
           </button>
         </div>
 
-        <p className="signup-link">
-          Don’t have an account? <Link to="/signup">Sign Up</Link>
-        </p>
+        <div className="auth-links">
+          <p>
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </p>
+          <p>
+            Don’t have an account? <Link to="/signup">Sign Up</Link>
+          </p>
+        </div>
       </form>
     </AuthLayout>
   );

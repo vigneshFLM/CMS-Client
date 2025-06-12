@@ -17,6 +17,8 @@ import AccessManagement from "./pages/AccessManagement";
 import Credentials from "./pages/Credentials";
 import ApprovalsRequests from "./pages/ApprovalsRequests";
 import MyRequests from "./pages/MyRequests";
+import ForgotPassword from "./components/Auth/ForgotPassword";
+import ResetPassword from "./components/Auth/ResetPassword";
 import "./App.css";
 
 function App() {
@@ -49,6 +51,24 @@ function App() {
             )
           }
         />
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicLayout>
+              <ForgotPassword />
+            </PublicLayout>
+          }
+        />
+
+        <Route
+          path="/reset-password/:token"
+          element={
+            <PublicLayout>
+              <ResetPassword />
+            </PublicLayout>
+          }
+        />
+
         <Route
           path="/dashboard"
           element={

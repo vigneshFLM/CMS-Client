@@ -1,3 +1,4 @@
+import ForgotPassword from "../components/Auth/ForgotPassword";
 import api from "../services/api";
 
 const authApi = {
@@ -17,6 +18,11 @@ const authApi = {
         headers: { Authorization: `Bearer ${token}` },
       }
     ),
+
+  forgotPassword: (email) => api.post("/auth/forgot-password", { email }),
+
+  resetPassword: ({ token, password }) =>
+    api.post("/auth/reset-password", { password, token }),
 };
 
 export default authApi;

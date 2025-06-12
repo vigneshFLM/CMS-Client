@@ -59,11 +59,27 @@
 
 .signup-link {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 14px;
 }
 
 .signup-link a {
   color: #2492fc;
   text-decoration: none;
+}
+
+.auth-links {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.auth-links a {
+  color: #2492fc;
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
 }
