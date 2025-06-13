@@ -7,65 +7,95 @@ const CredentialTable = ({
   onEdit,
   onDelete,
   userRole,
-}) => (
-  <div className="table-wrapper">
-    <table className="table credential-table">
-      <thead>
-        <tr>
+}) => {
+  const renderHeadings = () => {
+    if (userRole === "super-admin") {
+      return (
+        <>
+          <th>S.no</th>
+          <th>Name</th>
+          <th>Created By</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </>
+      );
+    } else if (userRole === "admin") {
+      return (
+        <>
           <th>S.no</th>
           <th>Name</th>
           <th>Granted By</th>
           <th>Granted At</th>
           <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {credentials.map((c, i) => (
-          <tr key={c.credential_id}>
-            <td>{i + 1}</td>
-            <td>{c.name}</td>
-            <td>{c.created_by_name}</td>
-            <td>{new Date(c.created_at).toLocaleString()}</td>
-            <td className="action-buttons">
-              {c.status === "revoked" ? (
-                <span className="revoked-label">Revoked</span>
-              ) : (
-                <>
-                  <button
-                    className="action-button view-button"
-                    onClick={() => onView(c.credential_id)}
-                    title="View"
-                  >
-                    <IconEye size={18} />
-                  </button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <th>S.no</th>
+          <th>Name</th>
+          <th>Granted By</th>
+          <th>Granted At</th>
+          <th>Actions</th>
+        </>
+      );
+    }
+  };
 
-                  {(userRole === "super-admin" || userRole === "admin") && (
-                    <>
-                      <button
-                        className="action-button edit-icon"
-                        onClick={() => onEdit(c)}
-                        title="Edit"
-                      >
-                        <IconEdit size={18} />
-                      </button>
+  return (
+    <div className="table-wrapper">
+      <table className="table credential-table">
+        <thead>
+          <tr>{renderHeadings()}</tr>
+        </thead>
+        <tbody>
+          {credentials.map((c, i) => (
+            <tr key={c.credential_id}>
+              <td>{i + 1}</td>
+              <td>{c.name}</td>
+              <td>{c.created_by_name}</td>
+              <td>{new Date(c.created_at).toLocaleString()}</td>
+              <td className="action-buttons">
+                {c.status === "revoked" ? (
+                  <span className="revoked-label">Revoked</span>
+                ) : (
+                  <>
+                    <button
+                      className="action-button view-button"
+                      onClick={() => onView(c.credential_id)}
+                      title="View"
+                    >
+                      <IconEye size={18} />
+                    </button>
 
-                      <button
-                        className="action-button delete-icon"
-                        onClick={() => onDelete(c.credential_id)}
-                        title="Delete"
-                      >
-                        <IconTrash size={18} color="#d32f2f" />
-                      </button>
-                    </>
-                  )}
-                </>
-              )}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
+                    {(userRole === "super-admin" || userRole === "admin") && (
+                      <>
+                        <button
+                          className="action-button edit-icon"
+                          onClick={() => onEdit(c)}
+                          title="Edit"
+                        >
+                          <IconEdit size={18} />
+                        </button>
+
+                        <button
+                          className="action-button delete-icon"
+                          onClick={() => onDelete(c.credential_id)}
+                          title="Delete"
+                        >
+                          <IconTrash size={18} color="#d32f2f" />
+                        </button>
+                      </>
+                    )}
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 export default CredentialTable;

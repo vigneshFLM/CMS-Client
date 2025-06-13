@@ -102,6 +102,7 @@ const Credentials = () => {
           const addRes = await CredentialAPI.add(credentialData);
           setCredentials((prev) => [addRes.data, ...prev]);
           showNotification("Credential added successfully!", "success");
+          console.log("New Credential:", addRes.data);
           break;
         case "editCred":
           await CredentialAPI.update(editId, credentialData);
@@ -121,10 +122,13 @@ const Credentials = () => {
       handleApiError(err, showNotification, "Action failed");
     }
 
-    fetchCredentials();
+    console.log("Credentials after add:", credentials);
+    console.log("Filtered after add:", filtered);
+
     setCredentialData({ name: "", username: "", password: "" });
     setShowForm(false);
     setEditMode(false);
+    fetchCredentials();
   };
 
   const handleEdit = async (cred) => {
