@@ -4,7 +4,7 @@ import { IconX } from "@tabler/icons-react";
 const PostView = ({ post, onClose, user }) => {
   if (!post) return null;
   const isSubmitter = user?.post_role === "submitter";
-  const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
 
   const getEmbeddedDriveUrl = (url) => {
     const match = url.match(/\/d\/(.*?)\//);
