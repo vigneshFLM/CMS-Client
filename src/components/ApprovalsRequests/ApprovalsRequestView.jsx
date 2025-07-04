@@ -10,8 +10,8 @@ const ApprovalRequestView = ({ show, data, onClose }) => {
 
         <div className="form-group">
           <label className="form-label">
-            <strong>Credential: </strong>
-            <span className="form-value">{data.credential_name || "N/A"}</span>
+            <strong>Resource: </strong>
+            <span className="form-value">{data.resource_name || "N/A"}</span>
           </label>
         </div>
 

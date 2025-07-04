@@ -5,7 +5,7 @@ export const handleApiError = (err, showNotification, fallbackMsg = "Something w
   const message = response?.message || fallbackMsg;
 
   // Dev debug log
-  if (process.env.NODE_ENV === "development") {
+  if (import.meta.env && import.meta.env.MODE === "development") {
     console.error("API Error:", code, message);
   }
 
@@ -32,22 +32,22 @@ export const handleApiError = (err, showNotification, fallbackMsg = "Something w
       showNotification("You don't have permission to perform this action.", "error");
       break;
 
-    // 🧾 Credential errors
-    case "CREDENTIAL_NOT_FOUND":
-      showNotification("Credential not found.", "warning");
+    // 🧾 Resource errors
+    case "RESOURCE_NOT_FOUND":
+      showNotification("Resource not found.", "warning");
       break;
-    case "CREDENTIAL_ALREADY_EXISTS":
-      showNotification("A credential with this name already exists.", "info");
+    case "RESOURCE_ALREADY_EXISTS":
+      showNotification("A resource with this name already exists.", "info");
       break;
-    case "CREDENTIAL_CREATION_FAILED":
-    case "CREDENTIAL_UPDATE_FAILED":
-    case "CREDENTIAL_DELETE_FAILED":
-      showNotification("There was a problem with the credential operation.", "error");
+    case "RESOURCE_CREATION_FAILED":
+    case "RESOURCE_UPDATE_FAILED":
+    case "RESOURCE_DELETE_FAILED":
+      showNotification("There was a problem with the resource operation.", "error");
       break;
 
     // 📥 Request errors
     case "DUPLICATE_REQUEST":
-      showNotification("You’ve already requested this credential.", "info");
+      showNotification("You've already requested this resource.", "info");
       break;
     case "REQUEST_NOT_FOUND":
       showNotification("Request not found.", "warning");
@@ -84,13 +84,13 @@ export const handleApiError = (err, showNotification, fallbackMsg = "Something w
 
     // 📊 Stats / Misc
     case "NO_MAPPINGS":
-      showNotification("No credentials found.", "info");
+      showNotification("No resources found.", "info");
       break;
     case "NO_USERS":
       showNotification("No users found.", "info");
       break;
-    case "NO_CREDENTIALS":
-      showNotification("No credentials accessed.", "info");
+    case "NO_RESOURCES":
+      showNotification("No resources accessed.", "info");
       break;
     case "STATS_FETCH_FAILED":
       showNotification("Unable to load dashboard stats.", "error");
@@ -100,10 +100,8 @@ export const handleApiError = (err, showNotification, fallbackMsg = "Something w
     case "VALIDATION_ERROR":
       showNotification(message, "warning");
       break;
-
-    case "INTERNAL_ERROR":
     default:
-      showNotification(message || fallbackMsg, "error");
+      showNotification(message, "error");
       break;
   }
 };

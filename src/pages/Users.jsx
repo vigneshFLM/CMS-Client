@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import api from "../services/api";
+import React, { useEffect, useState, useCallback } from "react";
 import userApi from "../api/userApi";
+import resourceApi from "../api/resourceApi";
 import { useNotification } from "../context/NotificationContext";
 import { handleApiError } from "../utils/errorHandler";
 import { validateUser } from "../utils/validateUser";
 import UserFilters from "../components/Users/UserFilters";
 import UserForm from "../components/Users/UserForm";
 import UserTable from "../components/Users/UserTable";
+import AccessTable from "../components/Users/UserAccessTable";
 import Pagination from "../components/Pagination";
 import ConfirmationOverlay from "../components/ConfirmationOverlay";
 import { useAuth } from "../context/AuthContext";
@@ -24,6 +25,12 @@ const Users = () => {
   const [roles] = useState(["user", "admin"]);
   const [managers, setManagers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  const [accessOverlayVisible, setAccessOverlayVisible] = useState(false);
+  const [selectedUserAccess, setSelectedUserAccess] = useState([]);
+  const [selectedUserName, setSelectedUserName] = useState("");
+  const [accessLoading, setAccessLoading] = useState(false);
 
   const [newUser, setNewUser] = useState({
     name: "",
@@ -48,8 +55,7 @@ const Users = () => {
   const currentUsers = filtered.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filtered.length / usersPerPage);
 
-  // Fetch users based on role (super-admin or admin)
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       if (user.role === "super-admin") {
@@ -70,17 +76,9 @@ const Users = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user.role, user.id]);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  useEffect(() => {
-    filterUsers();
-  }, [search, roleFilter, managerFilter, accessFilter, users]);
-
-  const filterUsers = () => {
+  const filterUsers = useCallback(() => {
     let list = [...users];
     const term = search.toLowerCase().trim();
 
@@ -109,7 +107,15 @@ const Users = () => {
 
     setFiltered(list);
     setCurrentPage(1);
-  };
+  }, [search, roleFilter, managerFilter, accessFilter, users]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  useEffect(() => {
+    filterUsers();
+  }, [filterUsers]);
 
   const resetForm = () => {
     setNewUser({ name: "", email: "", password: "", role: "", manager_id: "" });
@@ -126,14 +132,21 @@ const Users = () => {
   const handleOverlayConfirm = async () => {
     const { actionType, data } = overlayData;
     setShowOverlay(false);
+    setSubmitting(true);
 
     try {
       if (actionType === "addUser") {
-        if (!validateUser(newUser, showNotification, false)) return;
+        if (!validateUser(newUser, showNotification, false)) {
+          setSubmitting(false);
+          return;
+        }
         await userApi.register(newUser);
         showNotification("User added successfully!", "success");
       } else if (actionType === "editUser") {
-        if (!validateUser(newUser, showNotification, true)) return;
+        if (!validateUser(newUser, showNotification, true)) {
+          setSubmitting(false);
+          return;
+        }
         await userApi.update(editId, newUser);
         showNotification("User updated successfully!", "success");
       } else if (actionType === "deleteUser") {
@@ -145,6 +158,8 @@ const Users = () => {
       fetchUsers();
     } catch (err) {
       handleApiError(err, showNotification, "Action failed");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -154,6 +169,22 @@ const Users = () => {
     setNewUser({ ...user, password: "" });
     setShowForm(true);
   };
+
+  const handleAccessView = async (user) => {
+  setAccessOverlayVisible(true);
+  setSelectedUserName(user.name);
+  setAccessLoading(true);
+
+  try {
+    const response = await resourceApi.getResourceByUserId(user.id); // ⬅️ Make sure this API exists
+    setSelectedUserAccess(response.data);
+  } catch (err) {
+    handleApiError(err, showNotification, "Failed to fetch access data");
+  } finally {
+    setAccessLoading(false);
+  }
+};
+
 
   return (
     <div className="users-container">
@@ -199,6 +230,7 @@ const Users = () => {
           }
           onCancel={resetForm}
           editMode={editMode}
+          submitting={submitting}
         />
       )}
 
@@ -215,6 +247,7 @@ const Users = () => {
             users={currentUsers}
             userRole={user.role}
             indexOfFirstUser={indexOfFirstUser}
+            onAccessView={handleAccessView}
             onEdit={handleEdit}
             onDelete={(id) => {
               const user = users.find((u) => u.id === id);
@@ -236,6 +269,36 @@ const Users = () => {
         onConfirm={handleOverlayConfirm}
         onCancel={() => setShowOverlay(false)}
       />
+
+      {accessOverlayVisible && (
+        <div className="overlay">
+          <div className="access-table-form-floating access-overlay">
+            <h3 className="overlay-title">Access for {selectedUserName}</h3>
+
+            {accessLoading ? (
+              <div className="loading">
+                <span className="spinner" />
+                <span>Loading Access Data...</span>
+              </div>
+            ) : selectedUserAccess.length === 0 ? (
+              <p className="no-data">No access records found.</p>
+            ) : (
+              <AccessTable
+                entries={selectedUserAccess}
+                indexOfFirst={0}
+                onRevoke={() => {}} // optional: disable or customize
+                revokingId={null}
+              />
+            )}
+
+            <div className="floating-buttons">
+              <button onClick={() => setAccessOverlayVisible(false)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -13,12 +13,13 @@ import PublicLayout from "./Layouts/PublicLayout";
 import Profile from "./pages/Profile";
 import Users from "./pages/Users";
 import AccessManagement from "./pages/AccessManagement";
+import Posts from "./pages/Posts";
 // import Credentials from "./components/Credentials/Credentials";
-import Credentials from "./pages/Credentials";
 import ApprovalsRequests from "./pages/ApprovalsRequests";
 import MyRequests from "./pages/MyRequests";
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import ResetPassword from "./components/Auth/ResetPassword";
+import Resources from "./pages/Resources";
 import "./App.css";
 
 function App() {
@@ -106,18 +107,6 @@ function App() {
           }
         />
         <Route
-          path="/credentials"
-          element={
-            isAuthenticated ? (
-              <MainLayout>
-                <Credentials />
-              </MainLayout>
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-        <Route
           path="/access-management"
           element={
             isAuthenticated ? (
@@ -147,6 +136,30 @@ function App() {
             isAuthenticated ? (
               <MainLayout>
                 <MyRequests />
+              </MainLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/posts"
+          element={
+            isAuthenticated ? (
+              <MainLayout>
+                <Posts />
+              </MainLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/resources"
+          element={
+            isAuthenticated ? (
+              <MainLayout>
+                <Resources />
               </MainLayout>
             ) : (
               <Navigate to="/login" replace />

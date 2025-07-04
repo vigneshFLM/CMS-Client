@@ -1,7 +1,14 @@
 import React from "react";
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconTrash, IconEye } from "@tabler/icons-react";
 
-const UserTable = ({ users, indexOfFirstUser, onEdit, onDelete, userRole }) => (
+const UserTable = ({
+  users,
+  indexOfFirstUser,
+  onAccessView,
+  onEdit,
+  onDelete,
+  userRole,
+}) => (
   <div className="table-wrapper">
     <table className="table">
       <thead>
@@ -27,11 +34,25 @@ const UserTable = ({ users, indexOfFirstUser, onEdit, onDelete, userRole }) => (
             <td>{u.designation || "-"}</td>
             <td>{u.role}</td>
             <td>{u.manager_name || "-"}</td>
-            <td>{u.access_count}</td>
             <td>
-              {(userRole === "super-admin" ||
-                (userRole === "admin" && u.manager_id === userRole.id)) && (
+              <div className="access-count-view">
+                {u.access_count}
+                {u.access_count > 0 && (
+                  <button
+                    className="action-button view-icon"
+                    onClick={() => onAccessView(u)}
+                  >
+                    View
+                  </button>
+                )}
+              </div>
+            </td>
+
+            {(userRole === "super-admin" ||
+              (userRole === "admin" && u.manager_id === userRole.id)) && (
+              <td>
                 <div className="action-buttons">
+                  {" "}
                   <button
                     className="action-button edit-icon"
                     onClick={() => onEdit(u)}
@@ -45,8 +66,8 @@ const UserTable = ({ users, indexOfFirstUser, onEdit, onDelete, userRole }) => (
                     <IconTrash size={16} color="#d32f2f" />
                   </button>
                 </div>
-              )}
-            </td>
+              </td>
+            )}
           </tr>
         ))}
       </tbody>

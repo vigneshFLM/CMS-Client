@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "../styles/ApprovalsRequests.css";
 import ApprovalsFilters from "../components/ApprovalsRequests/ApprovalsFilters";
 import ApprovalsTable from "../components/ApprovalsRequests/ApprovalsTable";
@@ -46,13 +46,9 @@ const ApprovalsRequests = () => {
     };
 
     fetchRequests();
-  }, []);
+  }, [showNotification]);
 
-  useEffect(() => {
-    filterRequests();
-  }, [search, statusFilter, requests]);
-
-  const filterRequests = () => {
+  const filterRequests = useCallback(() => {
     let list = [...requests];
     if (search.trim()) {
       const term = search.toLowerCase();
@@ -68,13 +64,17 @@ const ApprovalsRequests = () => {
     }
     setFiltered(list);
     setCurrentPage(1);
-  };
+  }, [search, statusFilter, requests]);
+
+  useEffect(() => {
+    filterRequests();
+  }, [filterRequests]);
 
   const confirmStatusUpdate = (
     reqId,
     reqStatus,
     reqUserId,
-    reqCredentialId
+    reqResourceId
   ) => {
     const request = requests.find((r) => r.id === reqId);
     setOverlayData({
@@ -83,7 +83,7 @@ const ApprovalsRequests = () => {
       reqId,
       reqStatus,
       reqUserId,
-      reqCredentialId,
+      reqResourceId,
     });
     setShowOverlay(true);
   };
@@ -93,18 +93,18 @@ const ApprovalsRequests = () => {
   };
 
   const handleOverlayConfirm = async () => {
-    const { reqId, reqStatus, reqUserId, reqCredentialId } = overlayData;
+    const { reqId, reqStatus, reqUserId, reqResourceId } = overlayData;
     setShowOverlay(false);
 
     try {
-      if (reqCredentialId === 1) {
+      if (reqResourceId === 1) {
         await RequestsAPI.updateSuperAdminStatus(reqId, reqStatus);
       } else {
         // ✅ Regular access request
         if (reqStatus === "approved") {
           await AccessApi.grantAccess(
             reqUserId,
-            reqCredentialId,
+            reqResourceId,
             currentUserId
           );
         }

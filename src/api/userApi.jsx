@@ -7,6 +7,7 @@ const userApi = {
   register: (data) => api.post("/auth/register", data),
   update: (id, data) => api.patch(`/users/update/${id}`, data),
   delete: (id) => api.delete(`/users/delete/${id}`),
+  fetchApprovers: () => api.get("/posts/approvers"),
 };
 
 export default userApi;

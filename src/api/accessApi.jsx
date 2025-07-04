@@ -1,13 +1,13 @@
 import api from "../services/api";
 
 const accessApi = {
-  getAllAccess: () => api.get("/user-credentials/allAccess"),
+  getAllAccess: () => api.get("/resourceAccess/allAccess"),
   getAccessAdminUsers:  (adminId) => 
-    api.get(`/user-credentials/${adminId}/users/access`),
-  revokeAccess: (userId, credentialId) =>
-    api.post("/user-credentials/revoke", { userId, credentialId }),
-  grantAccess: (userId, credentialId, grantedById) =>
-    api.post("/user-credentials/grant", { userId, credentialId, grantedById }),
+    api.get(`/resourceAccess/${adminId}/users/access`),
+  revokeAccess: (userId, resourceId) =>
+    api.post("/resourceAccess/revoke", { userId, resourceId }),
+  grantAccess: (userId, resourceId, grantedById) =>
+    api.post("/resourceAccess/grant", { userId, resourceId, grantedById }),
 };
 
 export default accessApi;

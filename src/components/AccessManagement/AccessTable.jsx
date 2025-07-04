@@ -6,7 +6,7 @@ const AccessTable = ({ entries, onRevoke, revokingId, indexOfFirst }) => (
           <th>S.no</th>
           <th>User</th>
           <th>Email</th>
-          <th>Credential</th>
+          <th>Resource</th>
           <th>Status</th>
           <th>Granted By</th>
           <th>Created At</th>
@@ -29,10 +29,10 @@ const AccessTable = ({ entries, onRevoke, revokingId, indexOfFirst }) => (
               {entry.status === "active" ? (
                 <button
                   className="revoke-button"
-                  disabled={revokingId === `${entry.user_id}-${entry.credential_id}`}
-                  onClick={() => onRevoke(entry.user_id, entry.credential_id)}
+                  disabled={revokingId === `${entry.user_id}-${entry.resource_id}`}
+                  onClick={() => onRevoke(entry.user_id, entry.resource_id)}
                 >
-                  {revokingId === `${entry.user_id}-${entry.credential_id}` ? "Revoking..." : "Revoke"}
+                  {revokingId === `${entry.user_id}-${entry.resource_id}` ? "Revoking..." : "Revoke"}
                 </button>
               ) : (
                 "Revoked"

@@ -344,3 +344,10 @@ body {
     font-size: 15px;
   }
 }
+
+.access-count-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}

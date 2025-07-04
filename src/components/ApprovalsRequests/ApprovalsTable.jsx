@@ -13,10 +13,11 @@ const ApprovalsTable = ({
         <tr>
           <th>S.no</th>
           <th>User</th>
-          <th>Credential</th>
+          <th>Resource</th>
+          <th>Type</th>
           <th>Reason</th>
           <th>Status</th>
-          <th>Reviewer</th>
+          <th>Reviewed By</th>
           <th>Created At</th>
           <th>Action</th>
         </tr>
@@ -26,7 +27,15 @@ const ApprovalsTable = ({
           <tr key={req.id}>
             <td>{indexOfFirst + i + 1}</td>
             <td>{req.user_name || `User ${req.user_id}`}</td>
-            <td>{req.credential_name || `Credential ${req.credential_id}`}</td>
+            <td>{req.resource_name || `Credential ${req.credential_id}`}</td>
+            <td>
+              {req.resource_type === "cred"
+                ? "Credential"
+                : req.resource_type === "asset"
+                ? "Asset"
+                : "NA"}
+            </td>
+
             <td>{req.reason}</td>
             <td>
               <span className={`status-tag ${req.status}`}>{req.status}</span>
@@ -52,7 +61,7 @@ const ApprovalsTable = ({
                           req.id,
                           "approved",
                           req.user_id,
-                          req.credential_id
+                          req.resource_id
                         )
                       }
                       title="Approve"

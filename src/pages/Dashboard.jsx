@@ -27,7 +27,7 @@ const Dashboard = () => {
     };
 
     fetchStats();
-  }, [user, token]);
+  }, [user, token, showNotification]);
 
   return (
     <div style={{ padding: "2rem" }}>

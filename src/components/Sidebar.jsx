@@ -10,13 +10,15 @@ import {
   IconLockAccessOff,
   IconMenu2,
   IconX,
+  IconPhotoShare
 } from "@tabler/icons-react";
 import { useAuth } from "../context/AuthContext";
 import "../styles/Sidebar.css";
 
 const Sidebar = () => {
   const location = useLocation();
-  const user = useAuth();
+  const { user } = useAuth();
+
   const [isOpen, setIsOpen] = useState(false);
   const isActive = (path) => location.pathname === path;
 
@@ -40,9 +42,9 @@ const Sidebar = () => {
       roles: ["super-admin", "admin"],
     },
     {
-      path: "/credentials",
+      path: "/resources",
       icon: <IconLockPassword size={18} />,
-      label: "Credentials",
+      label: "Resources",
       roles: ["user", "admin", "super-admin"],
     },
     {
@@ -63,7 +65,23 @@ const Sidebar = () => {
       label: "My Requests",
       roles: ["admin", "user"],
     },
+    {
+      path: "/posts",
+      icon: <IconPhotoShare size={18} />,
+      label: "Posts",
+      posts: ["approver", "submitter"],
+    },
   ];
+
+  const filteredMenuItems = menuItems.filter((item) => {
+    if (item.roles && item.roles.includes(user?.role)) {
+      return true;
+    }
+    if (item.posts && item.posts.includes(user?.post_role)) {
+      return true;
+    }
+    return false;
+  });
 
   return (
     <>
@@ -84,19 +102,17 @@ const Sidebar = () => {
         </div>
         <hr />
         <nav className="menu">
-          {menuItems
-            .filter((item) => item.roles.includes(user?.role))
-            .map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={isActive(item.path) ? "active" : ""}
-                onClick={() => setIsOpen(false)} // close on click
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </Link>
-            ))}
+          {filteredMenuItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={isActive(item.path) ? "active" : ""}
+              onClick={() => setIsOpen(false)}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </Link>
+          ))}
         </nav>
       </div>
     </>

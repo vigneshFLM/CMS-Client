@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import requestApi from "../api/requestsApi";
 import { useNotification } from "../context/NotificationContext";
 import RequestFilters from "../components/MyRequests/RequestFilters";
@@ -17,13 +17,15 @@ const MyRequests = () => {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [loading, setLoading] = useState(true);
-  const [credentialOptions, setCredentialOptions] = useState([]);
+  const [resourceOptions, setResourceOptions] = useState([]);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [editingRequestId, setEditingRequestId] = useState(null);
   const [requestForm, setRequestForm] = useState({
-    credential_id: "",
+    resource_id: "",
     reason: "",
+    type: "",
   });
+
   const [submitting, setSubmitting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const requestsPerPage = 10;
@@ -32,11 +34,14 @@ const MyRequests = () => {
 
   // Overlay state
   const [showOverlay, setShowOverlay] = useState(false);
-  const [overlayData, setOverlayData] = useState({ actionType: "", data: null });
+  const [overlayData, setOverlayData] = useState({
+    actionType: "",
+    data: null,
+  });
 
   const { showNotification } = useNotification();
 
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     setLoading(true);
     try {
       const res = await requestApi.getMyRequests();
@@ -50,17 +55,17 @@ const MyRequests = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showNotification]);
 
   useEffect(() => {
     fetchRequests();
-  }, []);
+  }, [fetchRequests]);
 
   useEffect(() => {
     const term = search.toLowerCase();
     const list = requests.filter((r) => {
       const matchReason = r.reason.toLowerCase().includes(term);
-      const matchCredential = r.credential_name?.toLowerCase().includes(term);
+      const matchCredential = r.resource_name?.toLowerCase().includes(term);
       const matchStatus = !statusFilter || r.status === statusFilter;
       return (matchReason || matchCredential) && matchStatus;
     });
@@ -70,13 +75,13 @@ const MyRequests = () => {
 
   const handleNewRequest = async () => {
     try {
-      const res = await requestApi.getCredentialNames();
-      setCredentialOptions(res.data);
-      setRequestForm({ credential_id: "", reason: "" });
+      const res = await requestApi.getResourceNames();
+      setResourceOptions(res.data);
+      setRequestForm({ resource_id: "", reason: "" });
       setEditingRequestId(null);
       setShowRequestForm(true);
     } catch (err) {
-      handleApiError(err, showNotification, "Failed to load credentials");
+      handleApiError(err, showNotification, "Failed to load resources");
     }
   };
 
@@ -111,7 +116,7 @@ const MyRequests = () => {
       fetchRequests();
       setShowRequestForm(false);
       setEditingRequestId(null);
-      setRequestForm({ credential_id: "", reason: "" });
+      setRequestForm({ resource_id: "", reason: "" });
     } catch (err) {
       handleApiError(err, showNotification, "Action failed");
     } finally {
@@ -121,7 +126,7 @@ const MyRequests = () => {
 
   // Submit with confirmation
   const handleSubmit = () => {
-    if (!requestForm.credential_id || !requestForm.reason.trim()) {
+    if (!requestForm.resource_id || !requestForm.reason.trim()) {
       showNotification("Please fill in all fields", "error");
       return;
     }
@@ -136,16 +141,29 @@ const MyRequests = () => {
 
   const handleRequestEdit = async (id) => {
     try {
+      // Fetch the request data
       const res = await requestApi.getById(id);
       const req = res.data;
+
+      // Fetch resource options if not already loaded
+      if (resourceOptions.length === 0) {
+        const resourceRes = await requestApi.getResourceNames();
+        setResourceOptions(resourceRes.data);
+      }
+
+      // Set form and state
       setRequestForm({
-        credential_id: req.credential_id,
+        resource_id: req.resource_id,
         reason: req.reason,
       });
       setEditingRequestId(id);
       setShowRequestForm(true);
     } catch (err) {
-      handleApiError(err, showNotification, "Failed to fetch request for editing");
+      handleApiError(
+        err,
+        showNotification,
+        "Failed to fetch request for editing"
+      );
     }
   };
 
@@ -183,7 +201,7 @@ const MyRequests = () => {
 
       {showRequestForm && (
         <RequestForm
-          credentialOptions={credentialOptions}
+          resourceOptions={resourceOptions}
           requestForm={requestForm}
           setRequestForm={setRequestForm}
           submitting={submitting}

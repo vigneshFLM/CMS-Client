@@ -10,9 +10,9 @@ const RequestView = ({ show, data, onClose }) => {
 
         <div className="form-group">
           <label className="form-label">
-            <strong>Credential:</strong>
+            <strong>Resource:</strong>
           </label>
-          <div className="form-value">{data.credential_name || "N/A"}</div>
+          <div className="form-value">{data.resource_name || "N/A"}</div>
         </div>
 
         <div className="form-group">

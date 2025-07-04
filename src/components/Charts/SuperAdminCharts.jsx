@@ -36,7 +36,8 @@ const SuperAdminCharts = ({ stats }) => {
       <div className="stat-cards">
         <StatCard title="Total Users" value={stats.users} />
         <StatCard title="Total Admins" value={stats.admins} color="#dc3545" />
-        <StatCard title="Credentials" value={stats.credentials} color="#28a745" />
+        <StatCard title="Credentials" value={stats.credentials} color="#ffc107" />
+        <StatCard title="Assets" value={stats.assets} color="#28a745" />
         {/* <StatCard
           title="Active Access"
           value={stats.activeAccess}
@@ -53,12 +54,12 @@ const SuperAdminCharts = ({ stats }) => {
         <div className="chart-box">
           <Bar
             data={{
-              labels: ["Users", "Admins", "Credentials"],
+              labels: ["Users", "Admins", "Credentials", "Assets"],
               datasets: [
                 {
                   label: "Total",
-                  data: [stats.users, stats.admins, stats.credentials],
-                  backgroundColor: ["#5b9bd5", "#71c285", "#f6b26b"],
+                  data: [stats.users, stats.admins, stats.credentials, stats.assets],
+                  backgroundColor: ["#5b9bd5", "#71c285", "#f6b26b", "#ffc107"],
                   borderRadius: 8,
                 },
               ],

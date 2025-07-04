@@ -8,12 +8,6 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 
-const renderStatusIcon = (status) => {
-  if (status === "approved") return <IconLockCheck size={16} color="#388e3c" />;
-  if (status === "rejected") return <IconLockX size={16} color="#d32f2f" />;
-  return <IconClockHour4 size={16} color="#f9a825" />;
-};
-
 const RequestTable = ({
   currentRequests,
   indexOfFirst,
@@ -26,7 +20,8 @@ const RequestTable = ({
       <thead>
         <tr>
           <th>S.no</th>
-          <th>Credential</th>
+          <th>Resource</th>
+          <th>Type</th>
           <th>Reason</th>
           <th>Status</th>
           <th>Reviewer</th>
@@ -38,7 +33,15 @@ const RequestTable = ({
         {currentRequests.map((req, i) => (
           <tr key={req.id}>
             <td>{indexOfFirst + i + 1}</td>
-            <td>{req.credential_name}</td>
+            <td>{req.resource_name}</td>
+            <td>
+              {req.resource_type === "cred"
+                ? "Credential"
+                : req.resource_type === "asset"
+                ? "Asset"
+                : "NA"}
+            </td>
+
             <td>{req.reason}</td>
             <td>
               <span className={`status-tag ${req.status}`}>{req.status}</span>

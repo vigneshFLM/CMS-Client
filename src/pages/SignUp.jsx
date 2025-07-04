@@ -33,7 +33,7 @@ const SignUp = () => {
       }
     };
     fetchManagers();
-  }, []);
+  }, [showNotification]);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -47,7 +47,7 @@ const SignUp = () => {
       return;
     }
 
-    const { confirmPassword, ...formData } = form;
+    const { confirmPassword: _, ...formData } = form;
 
     const payload = {
       ...formData,

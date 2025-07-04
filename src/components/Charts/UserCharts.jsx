@@ -25,7 +25,7 @@ ChartJS.register(
 );
 
 const UserCharts = ({ stats }) => {
-  const totalCredentials = stats.myCredentials.length;
+  // const totalCredentials = stats.myCredentials.length; // Removed unused variable
   const active = stats.myCredentials.filter(
     (c) => c.status === "active"
   ).length;
@@ -48,11 +48,11 @@ const UserCharts = ({ stats }) => {
     <div className="stats-container">
       <div className="stat-cards">
         {/* <StatCard title="Total Credentials" value={totalCredentials} /> */}
-        <StatCard title="Active Credentials" value={active} color="#28a745" />
-        <StatCard title="Revoked Credentials" value={revoked} color="#dc3545" />
+        <StatCard title="Active Resources" value={active} color="#28a745" />
+        <StatCard title="Revoked Resources" value={revoked} color="#dc3545" />
         {/* <StatCard title="Approved Requests" value={approved} color="#007bff" /> */}
-        <StatCard title="Pending Requests" value={pending} color="#6c757d" />
-        <StatCard title="Rejected Requests" value={rejected} color="#ffc107" />
+        <StatCard title="Awaiting Approval" value={pending} color="#6c757d" />
+        <StatCard title="Denied Requests" value={rejected} color="#ffc107" />
       </div>
 
       <div className="chart-wrapper">
@@ -62,7 +62,7 @@ const UserCharts = ({ stats }) => {
               labels: ["Active", "Revoked"],
               datasets: [
                 {
-                  label: "Credentials",
+                  label: "Resources",
                   data: [active, revoked],
                   backgroundColor: ["#5b9bd5", "#f6b26b"],
                   borderRadius: 8,
@@ -75,7 +75,7 @@ const UserCharts = ({ stats }) => {
               plugins: {
                 title: {
                   display: true,
-                  text: "Credential Summary",
+                  text: "Resource Summary",
                   font: { size: 18 },
                   padding: { top: 10, bottom: 20 },
                 },

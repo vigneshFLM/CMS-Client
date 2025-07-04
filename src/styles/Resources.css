@@ -1,0 +1,100 @@
+/* Password Input Container */
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input {
+  flex: 1;
+  padding-right: 35px;
+}
+
+.toggle-eye-button {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+
+/* Glassy Tab Container */
+.resource-tabs.table-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0 12px 0;
+  padding: 8px 12px;
+  width: fit-content;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  margin-right: auto;
+
+  background: rgba(144, 142, 142, 0.2);             /* semi-transparent gray */
+  backdrop-filter: blur(8px);                       /* frosted glass effect */
+  -webkit-backdrop-filter: blur(8px);               /* Safari support */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);          /* subtle shadow */
+  border: 1px solid rgba(255, 255, 255, 0.3);        /* glass border effect */
+  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+
+  /* Fallback background for unsupported browsers */
+  background-color: rgba(200, 200, 200, 0.4);
+}
+
+
+/* Tab Buttons */
+.resource-tabs.table-tabs button {
+  background: rgba(245, 247, 250, 0.8);              /* slight transparency */
+  border: 1px solid rgba(209, 213, 219, 0.8);
+  color: #333;
+  padding: 8px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+}
+
+
+/* Active Tab Button */
+.resource-tabs.table-tabs button.active {
+  background: #1976d2;
+  color: #fff;
+  border-color: #1976d2;
+  z-index: 1;
+}
+
+
+/* Hover Effect for Inactive Tabs */
+.resource-tabs.table-tabs button:not(.active):hover {
+  background: #e3eaf6;
+  color: #1976d2;
+}
+
+.resource-type-selection-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resource-type-selection-modal {
+  background-color: white;
+  padding: 50px 70px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative; /* Add this line */
+}
+
+.resource-type-selection-modal button {
+  margin: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+}

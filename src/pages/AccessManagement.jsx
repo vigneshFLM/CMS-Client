@@ -18,7 +18,6 @@ const AccessManagement = () => {
   const [loading, setLoading] = useState(true);
   const [revokingId, setRevokingId] = useState(null);
 
-  // New overlay state
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayData, setOverlayData] = useState(null);
 
@@ -27,84 +26,52 @@ const AccessManagement = () => {
 
   const rowsPerPage = 10;
 
-  useEffect(() => {
-    const fetchMappings = async () => {
-      try {
-        if (user.role === "super-admin") {
-          const response = await AccessAPI.getAllAccess();
-          setData(response.data);
-          setFiltered(response.data);
-        } else if (user.role === "admin") {
-          const response = await AccessAPI.getAccessAdminUsers(user.id);
-          setData(response.data);
-          setFiltered(response.data);
-        }
-      } catch (err) {
-        handleApiError(
-          err,
-          showNotification,
-          "Failed to fetch access mappings"
-        );
-      } finally {
-        setLoading(false);
+  // ✅ Declare fetchMappings at component scope
+  const fetchMappings = async () => {
+    try {
+      setLoading(true);
+      if (user.role === "super-admin") {
+        const response = await AccessAPI.getAllAccess();
+        setData(response.data);
+        setFiltered(response.data);
+      } else if (user.role === "admin") {
+        const response = await AccessAPI.getAccessAdminUsers(user.id);
+        setData(response.data);
+        setFiltered(response.data);
       }
-    };
-
-    fetchMappings();
-  }, []);
-
-  useEffect(() => {
-    filterData();
-  }, [search, statusFilter, data]);
-
-  const filterData = () => {
-    let list = [...data];
-
-    if (search.trim()) {
-      const term = search.toLowerCase();
-      list = list.filter(
-        (entry) =>
-          entry.user_name.toLowerCase().includes(term) ||
-          entry.user_email.toLowerCase().includes(term) ||
-          entry.credential_name.toLowerCase().includes(term)
-      );
+    } catch (err) {
+      handleApiError(err, showNotification, "Failed to fetch access mappings");
+    } finally {
+      setLoading(false);
     }
-
-    if (statusFilter) {
-      list = list.filter((entry) => entry.status === statusFilter);
-    }
-
-    setFiltered(list);
   };
+
+  // ✅ Single useEffect to call fetchMappings on load
+  useEffect(() => {
+    fetchMappings();
+  }, [showNotification, user.id, user.role]);
 
   const resetFilters = () => {
     setSearch("");
     setStatusFilter("");
   };
 
-  // Instead of revoke immediately, show overlay first
-  const confirmRevoke = (userId, credentialId) => {
-    setOverlayData({ userId, credentialId });
+  const confirmRevoke = (userId, resourceId) => {
+    setOverlayData({ userId, resourceId });
     setShowOverlay(true);
   };
 
-  // Called when user confirms revoke in overlay
   const handleOverlayConfirm = async () => {
-    const { userId, credentialId } = overlayData;
+    const { userId, resourceId } = overlayData;
     setShowOverlay(false);
-    setRevokingId(`${userId}-${credentialId}`);
+    setRevokingId(`${userId}-${resourceId}`);
 
     try {
-      await AccessAPI.revokeAccess(userId, credentialId);
-      const updated = data.map((entry) =>
-        entry.user_id === userId && entry.credential_id === credentialId
-          ? { ...entry, status: "revoked" }
-          : entry
-      );
-      setData(updated);
-      showNotification("Credential revoked successfully", "success");
+      await AccessAPI.revokeAccess(userId, resourceId);
+      showNotification("Resource revoked successfully", "success");
+      fetchMappings(); // ✅ now works correctly
     } catch (err) {
-      handleApiError(err, showNotification, "Failed to revoke credential");
+      handleApiError(err, showNotification, "Failed to revoke resource");
     } finally {
       setRevokingId(null);
     }

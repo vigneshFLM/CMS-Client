@@ -48,12 +48,12 @@ const AdminCharts = ({ stats }) => {
         />
         <StatCard
           title="Pending Requests"
-          value={stats.myRequests.pending}
+          value={stats.reviewedRequests.pending}
           color="#ffc107"
         />
         <StatCard
           title="Rejected Requests"
-          value={stats.myRequests.rejected}
+          value={stats.reviewedRequests.rejected}
           color="#6c757d"
         />
       </div>
