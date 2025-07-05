@@ -1,4 +1,5 @@
 import React from "react";
+import { IconTrash } from "@tabler/icons-react";
 
 const PostFilters = ({
   search,
@@ -13,6 +14,7 @@ const PostFilters = ({
   resetFilters,
   onCreatePost,
   onAssignPostRole,
+  onFilesDelete,
   userRole,
 }) => {
   return (
@@ -63,12 +65,21 @@ const PostFilters = ({
         </button>
 
         {userRole === "approver" ? (
-          <button
-            className="add-button"
-            onClick={onAssignPostRole} // Trigger the Assign Post Role form
-          >
-            Assign Post Role
-          </button>
+          <>
+            <button
+              className="add-button"
+              onClick={onAssignPostRole} // Trigger the Assign Post Role form
+            >
+              Assign Post Role
+            </button>
+            <button
+              className="action-button delete-icon"
+              title="Delete Files"
+              onClick={onFilesDelete}
+            >
+              <IconTrash size={16} color="#d32f2f" />
+            </button>
+          </>
         ) : (
           <button
             className="add-button"

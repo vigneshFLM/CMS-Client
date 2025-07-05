@@ -11,6 +11,7 @@ import PostForm from "../components/Posts/PostForm";
 import ConfirmationOverlay from "../components/ConfirmationOverlay";
 import AssignRoleForm from "../components/Posts/AssignRoleForm";
 import Pagination from "../components/Pagination";
+import UploadedFiles from "../components/Posts/UploadedFiles";
 
 const Posts = () => {
   const [users, setUsers] = useState([]);
@@ -25,7 +26,8 @@ const Posts = () => {
   const [showPostForm, setShowPostForm] = useState(false);
   const [postToEdit, setPostToEdit] = useState(null);
   const [editMode, setEditMode] = useState(false);
-
+  const [showBulkDelete, setShowBulkDelete] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [showAssignPostRoleForm, setShowAssignPostRoleForm] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayData, setOverlayData] = useState({
@@ -138,6 +140,23 @@ const Posts = () => {
     setCreatorFilter("");
   };
 
+  const handleBulkDelete = async () => {
+    await fetchUploadedFiles(); // fetch fresh list before showing
+    setShowBulkDelete(true);
+  };
+
+ const confirmBulkDelete = async (fileNames) => {
+  setShowBulkDelete(false);
+  try {
+    await postApi.deleteFiles(fileNames);
+    setUploadedFiles(prev => prev.filter((f) => !fileNames.includes(f)));
+    showNotification("Selected files deleted", "success");
+  } catch (err) {
+    handleApiError(err, showNotification, "Bulk file delete failed");
+  }
+};
+
+
   const confirmCreatePost = (postData) => {
     setOverlayData({
       actionType: "addPost",
@@ -153,6 +172,19 @@ const Posts = () => {
     });
     setShowOverlay(true);
   };
+
+  const fetchUploadedFiles = async () => {
+    try {
+      const response = await postApi.getFiles();
+      setUploadedFiles(response.data.files || []);
+    } catch (err) {
+      handleApiError(err, showNotification, "Failed to fetch uploaded files");
+    }
+  };
+
+  useEffect(() => {
+    fetchUploadedFiles();
+  }, []);
 
   const handleCreatePost = async (postData) => {
     setSubmitting(true);
@@ -301,6 +333,7 @@ const Posts = () => {
         onCreatePost={() => setShowPostForm(true)}
         onAssignPostRole={() => setShowAssignPostRoleForm(true)}
         userRole={user.post_role}
+        onFilesDelete={handleBulkDelete}
       />
 
       {loadingPosts ? (
@@ -319,6 +352,14 @@ const Posts = () => {
               showNotification={showNotification}
               editMode={editMode}
               postData={postToEdit}
+            />
+          )}
+
+          {showBulkDelete && (
+            <UploadedFiles
+              files={uploadedFiles}
+              onCancel={() => setShowBulkDelete(false)}
+              onConfirm={confirmBulkDelete}
             />
           )}
 
@@ -355,7 +396,11 @@ const Posts = () => {
           />
 
           {viewPost && (
-            <PostView post={viewPost} onClose={() => setViewPost(null)} user={user} />
+            <PostView
+              post={viewPost}
+              onClose={() => setViewPost(null)}
+              user={user}
+            />
           )}
 
           <ConfirmationOverlay

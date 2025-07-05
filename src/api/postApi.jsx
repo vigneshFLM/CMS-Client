@@ -27,17 +27,17 @@ const postApi = {
 
   // Approve or reject post
   updateStatus: (postId, status, comment, userId) =>
-  api.put(`/posts/action/${postId}`, {
-    status,
-    comment,
-    action_by: userId,
-  }),
+    api.put(`/posts/action/${postId}`, {
+      status,
+      comment,
+      action_by: userId,
+    }),
 
   // Update post details
   update: (postId, formData) =>
-  api.put(`/posts/${postId}`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  }),
+    api.put(`/posts/${postId}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }),
 
   // Delete post
   delete: (postId) => api.delete(`/posts/${postId}`),
@@ -51,6 +51,13 @@ const postApi = {
 
   // Get all pages
   getPages: () => api.get("/pages"),
+
+  getFiles: () => api.get("/posts/files"),
+
+  deleteFiles: (fileNames) =>
+    api.delete(`/posts/files`, {
+      data: { files: fileNames },
+    }),
 };
 
 export default postApi;

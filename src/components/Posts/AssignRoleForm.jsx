@@ -43,8 +43,8 @@ const AssignRoleForm = ({ users, onCancel, onSubmit, showNotification }) => {
           onChange={(e) => setSelectedRole(e.target.value)}
         >
           <option value="">-- Select Role --</option>
-          <option value="approver">Approve</option>
-          <option value="submitter">Submit</option>
+          <option value="approver">Approver</option>
+          <option value="submitter">Submitter</option>
         </select>
 
         <div className="floating-buttons">

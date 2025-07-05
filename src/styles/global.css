@@ -38,14 +38,20 @@ body {
   padding: clamp(0.6rem, 1.2vw, 0.75rem);
   border-radius: var(--border-radius);
   border: 1px solid #ccc;
-  min-width: 160px;
+  min-width: 120px;
   background-color: #fff;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  /* background-color: black; */
 }
 
 /* ---------- Search ---------- */
 .search-input {
   padding: 10px;
-  width: 300px;
+  width: 250px;
   border: 1px solid #ccc;
   border-radius: var(--border-radius);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
