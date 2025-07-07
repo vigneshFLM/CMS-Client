@@ -145,17 +145,16 @@ const Posts = () => {
     setShowBulkDelete(true);
   };
 
- const confirmBulkDelete = async (fileNames) => {
-  setShowBulkDelete(false);
-  try {
-    await postApi.deleteFiles(fileNames);
-    setUploadedFiles(prev => prev.filter((f) => !fileNames.includes(f)));
-    showNotification("Selected files deleted", "success");
-  } catch (err) {
-    handleApiError(err, showNotification, "Bulk file delete failed");
-  }
-};
-
+  const confirmBulkDelete = async (fileNames) => {
+    setShowBulkDelete(false);
+    try {
+      await postApi.deleteFiles(fileNames);
+      setUploadedFiles((prev) => prev.filter((f) => !fileNames.includes(f)));
+      showNotification("Selected files deleted", "success");
+    } catch (err) {
+      handleApiError(err, showNotification, "Bulk file delete failed");
+    }
+  };
 
   const confirmCreatePost = (postData) => {
     setOverlayData({
@@ -174,9 +173,17 @@ const Posts = () => {
   };
 
   const fetchUploadedFiles = async () => {
+    const role = user.post_role || "";
+
     try {
-      const response = await postApi.getFiles();
-      setUploadedFiles(response.data.files || []);
+      // Check if user is an approver
+      if (role === "approver") {
+        const response = await postApi.getFiles();
+        setUploadedFiles(response.data.files || []);
+      } else {
+        // Handle the case where the user is not an approver
+        setUploadedFiles([]); // No files for non-approvers
+      }
     } catch (err) {
       handleApiError(err, showNotification, "Failed to fetch uploaded files");
     }

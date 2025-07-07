@@ -9,7 +9,7 @@ const AccessTable = ({ entries, onRevoke, revokingId, indexOfFirst }) => (
           <th>Resource</th>
           <th>Status</th>
           <th>Granted By</th>
-          <th>Created At</th>
+          <th>Granted At</th>
           <th>Actions</th>
         </tr>
       </thead>
