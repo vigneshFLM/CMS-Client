@@ -46,10 +46,41 @@ const AccessManagement = () => {
     }
   };
 
+  const {
+    currentData: currentEntries,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    indexOfFirst,
+  } = usePagination(filtered, rowsPerPage);
+
   // ✅ Single useEffect to call fetchMappings on load
   useEffect(() => {
     fetchMappings();
   }, [showNotification, user.id, user.role]);
+
+  useEffect(() => {
+    let filteredData = [...data];
+
+    if (search.trim()) {
+      const lowerSearch = search.toLowerCase();
+      filteredData = filteredData.filter(
+        (item) =>
+          item.userName?.toLowerCase().includes(lowerSearch) ||
+          item.email?.toLowerCase().includes(lowerSearch) ||
+          item.credentialName?.toLowerCase().includes(lowerSearch)
+      );
+    }
+
+    if (statusFilter) {
+      filteredData = filteredData.filter(
+        (item) => item.status?.toLowerCase() === statusFilter.toLowerCase()
+      );
+    }
+
+    setFiltered(filteredData);
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [search, statusFilter, data]);
 
   const resetFilters = () => {
     setSearch("");
@@ -76,14 +107,6 @@ const AccessManagement = () => {
       setRevokingId(null);
     }
   };
-
-  const {
-    currentData: currentEntries,
-    currentPage,
-    setCurrentPage,
-    totalPages,
-    indexOfFirst,
-  } = usePagination(filtered, rowsPerPage);
 
   return (
     <div className="AccessManagement-container">
