@@ -33,11 +33,9 @@ const AccessManagement = () => {
       if (user.role === "super-admin") {
         const response = await AccessAPI.getAllAccess();
         setData(response.data);
-        setFiltered(response.data);
       } else if (user.role === "admin") {
         const response = await AccessAPI.getAccessAdminUsers(user.id);
         setData(response.data);
-        setFiltered(response.data);
       }
     } catch (err) {
       handleApiError(err, showNotification, "Failed to fetch access mappings");
@@ -59,11 +57,11 @@ const AccessManagement = () => {
     fetchMappings();
   }, [showNotification, user.id, user.role]);
 
-  useEffect(() => {
+  const filterAccessData = useCallback(() => {
     let filteredData = [...data];
+    const lowerSearch = search.toLowerCase().trim();
 
-    if (search.trim()) {
-      const lowerSearch = search.toLowerCase();
+    if (lowerSearch) {
       filteredData = filteredData.filter(
         (item) =>
           item.userName?.toLowerCase().includes(lowerSearch) ||
@@ -79,8 +77,12 @@ const AccessManagement = () => {
     }
 
     setFiltered(filteredData);
-    setCurrentPage(1); // Reset to first page when filters change
-  }, [search, statusFilter, data]);
+    setCurrentPage(1);
+  }, [data, search, statusFilter]);
+
+  useEffect(() => {
+    filterAccessData();
+  }, [filterAccessData]);
 
   const resetFilters = () => {
     setSearch("");
