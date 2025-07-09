@@ -42,3 +42,5 @@ const AccessFilters = ({
     </div>
   );
 };
+
+export default AccessFilters;
