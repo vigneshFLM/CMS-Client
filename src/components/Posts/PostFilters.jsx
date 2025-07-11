@@ -21,7 +21,7 @@ const PostFilters = ({
     <div className="filters">
       <input
         type="text"
-        placeholder="Search by title or description..."
+        placeholder="Search by title..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="search-input"
@@ -45,6 +45,7 @@ const PostFilters = ({
         <option value="pending">Pending</option>
         <option value="approved">Approved</option>
         <option value="rejected">Rejected</option>
+        <option value="rework">Rework</option>
       </select>
 
       <select

@@ -1,6 +1,12 @@
 import React from "react";
 
-const ApprovalsFilters = ({ search, setSearch, statusFilter, setStatusFilter }) => (
+const ApprovalsFilters = ({
+  search,
+  setSearch,
+  statusFilter,
+  setStatusFilter,
+  resetFilters,
+}) => (
   <div className="filters">
     <input
       type="text"
@@ -9,6 +15,7 @@ const ApprovalsFilters = ({ search, setSearch, statusFilter, setStatusFilter }) 
       onChange={(e) => setSearch(e.target.value)}
       className="search-input"
     />
+
     <select
       value={statusFilter}
       onChange={(e) => setStatusFilter(e.target.value)}
@@ -18,6 +25,10 @@ const ApprovalsFilters = ({ search, setSearch, statusFilter, setStatusFilter }) 
       <option value="approved">Approved</option>
       <option value="rejected">Rejected</option>
     </select>
+
+    <button className="reset-button" onClick={resetFilters}>
+      Reset Filters
+    </button>
   </div>
 );
 

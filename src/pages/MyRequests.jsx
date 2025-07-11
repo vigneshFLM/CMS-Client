@@ -191,6 +191,10 @@ const MyRequests = () => {
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
         onNewRequest={handleNewRequest}
+        resetFilters={() => {
+          setSearch("");
+          setStatusFilter("");
+        }}
       />
 
       <RequestView

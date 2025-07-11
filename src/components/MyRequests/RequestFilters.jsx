@@ -1,6 +1,13 @@
 import React from "react";
 
-const RequestFilters = ({ search, setSearch, statusFilter, setStatusFilter, onNewRequest }) => (
+const RequestFilters = ({
+  search,
+  setSearch,
+  statusFilter,
+  setStatusFilter,
+  onNewRequest,
+  resetFilters,
+}) => (
   <div className="filters">
     <div className="search-wrapper">
       <input
@@ -22,7 +29,13 @@ const RequestFilters = ({ search, setSearch, statusFilter, setStatusFilter, onNe
       <option value="rejected">Rejected</option>
     </select>
 
-    <button className="add-button" onClick={onNewRequest}>New Request</button>
+    <button className="add-button" onClick={onNewRequest}>
+      New Request
+    </button>
+
+    <button className="reset-button" onClick={resetFilters}>
+      Reset Filters
+    </button>
   </div>
 );
 

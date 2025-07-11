@@ -70,12 +70,7 @@ const ApprovalsRequests = () => {
     filterRequests();
   }, [filterRequests]);
 
-  const confirmStatusUpdate = (
-    reqId,
-    reqStatus,
-    reqUserId,
-    reqResourceId
-  ) => {
+  const confirmStatusUpdate = (reqId, reqStatus, reqUserId, reqResourceId) => {
     const request = requests.find((r) => r.id === reqId);
     setOverlayData({
       actionType: reqStatus === "approved" ? "approveRequest" : "rejectRequest",
@@ -102,11 +97,7 @@ const ApprovalsRequests = () => {
       } else {
         // ✅ Regular access request
         if (reqStatus === "approved") {
-          await AccessApi.grantAccess(
-            reqUserId,
-            reqResourceId,
-            currentUserId
-          );
+          await AccessApi.grantAccess(reqUserId, reqResourceId, currentUserId);
         }
         await RequestsAPI.updateStatus(reqId, reqStatus, currentUserId);
       }
@@ -136,6 +127,10 @@ const ApprovalsRequests = () => {
         setSearch={setSearch}
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
+        resetFilters={() => {
+          setSearch("");
+          setStatusFilter("");
+        }}
       />
 
       {loading ? (
