@@ -60,15 +60,21 @@ const AccessManagement = () => {
   }, [showNotification, user.id, user.role]);
 
   useEffect(() => {
+
+    console.log("Search:", search);
+  console.log("Status Filter:", statusFilter);
+  console.log("Raw data before filtering:", data);
+
+  
     let filteredData = [...data];
 
     if (search.trim()) {
       const lowerSearch = search.toLowerCase();
       filteredData = filteredData.filter(
         (item) =>
-          item.userName?.toLowerCase().includes(lowerSearch) ||
-          item.email?.toLowerCase().includes(lowerSearch) ||
-          item.credentialName?.toLowerCase().includes(lowerSearch)
+          item.user_name?.toLowerCase().includes(lowerSearch) ||
+          item.user_email?.toLowerCase().includes(lowerSearch) ||
+          item.credential_name?.toLowerCase().includes(lowerSearch)
       );
     }
 
@@ -79,7 +85,7 @@ const AccessManagement = () => {
     }
 
     setFiltered(filteredData);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   }, [search, statusFilter, data]);
 
   const resetFilters = () => {
