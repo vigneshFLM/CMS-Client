@@ -60,11 +60,6 @@ const AccessManagement = () => {
   }, [showNotification, user.id, user.role]);
 
   useEffect(() => {
-
-    console.log("Search:", search);
-  console.log("Status Filter:", statusFilter);
-  console.log("Raw data before filtering:", data);
-
   
     let filteredData = [...data];
 
