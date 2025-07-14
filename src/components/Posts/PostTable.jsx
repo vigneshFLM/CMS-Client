@@ -56,6 +56,7 @@ const PostTable = ({ posts, onDelete, user, refresh, onView, onEdit }) => {
             <th>Title</th>
             {!isSubmitter && <th>Submitted By</th>}
             <th>Page</th>
+            <th>Content Type</th>
             <th>Status</th>
             {hasActionBy && <th>Action By</th>}
             {hasActionAt && <th>Action At</th>}
@@ -75,6 +76,7 @@ const PostTable = ({ posts, onDelete, user, refresh, onView, onEdit }) => {
                   <td>{post.title}</td>
                   {!isSubmitter && <td>{post.submitted_by_name}</td>}
                   <td>{post.page_name}</td>
+                  <td>{post.content_type}</td>
                   <td>
                     <span className={`status-tag ${post.status}`}>
                       {post.status}
@@ -162,7 +164,7 @@ const PostTable = ({ posts, onDelete, user, refresh, onView, onEdit }) => {
           ) : (
             <tr>
               <td colSpan="6" style={{ textAlign: "center" }}>
-                No posts found.
+                No data found.
               </td>
             </tr>
           )}

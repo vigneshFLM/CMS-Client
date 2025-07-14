@@ -10,13 +10,15 @@ const ResourceTable = ({
   resourceType,
 }) => {
   const showActions =
-    userRole === "super-admin" || resources.some((r) => r.access_status !== "revoked");
+    userRole === "super-admin" ||
+    resources.some((r) => r.access_status !== "revoked");
 
   const renderHeadings = () => (
     <>
       <th>S.no</th>
       <th>Name</th>
       <th>Type</th>
+      {userRole !== "super-admin" && <th>Access Status</th>}
       {userRole === "super-admin" ? (
         <>
           <th>Created By</th>
@@ -49,6 +51,8 @@ const ResourceTable = ({
                 <td>{i + 1}</td>
                 <td>{r.name}</td>
                 <td>{r.type}</td>
+
+                {userRole !== "super-admin" && <td>{r.access_status}</td>}
 
                 {userRole === "super-admin" ? (
                   <>

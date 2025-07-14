@@ -21,6 +21,9 @@ const PostForm = ({
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingPages, setLoadingPages] = useState(true);
   const [deletedFileIds, setDeletedFileIds] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [fileSizeError, setFileSizeError] = useState("");
+
 
   const fileInputRef = useRef(null); // ref for clearing file input
 
@@ -65,7 +68,20 @@ const PostForm = ({
   }, []);
 
   const handleFilesChange = (e) => {
+    setFileSizeError(""); // Clear any previous error
+
+    const MAX_TOTAL_SIZE = 100 * 1024 * 1024; 
     const newFiles = Array.from(e.target.files);
+
+    const currentTotalSize = files.reduce((acc, file) => acc + file.size, 0);
+    const newTotalSize = newFiles.reduce((acc, file) => acc + file.size, 0);
+    const combinedSize = currentTotalSize + newTotalSize;
+
+    if (combinedSize > MAX_TOTAL_SIZE) {
+      setFileSizeError("Total file size cannot exceed 100MB.");
+      return; // Do not add new files
+    }
+
     const filtered = newFiles.filter(
       (file) =>
         !files.some(
@@ -75,6 +91,7 @@ const PostForm = ({
             f.lastModified === file.lastModified
         )
     );
+
     setFiles((prev) => [...prev, ...filtered]);
   };
 
@@ -88,6 +105,33 @@ const PostForm = ({
     });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!title.trim()) newErrors.title = "Title is required.";
+    if (!description.trim()) newErrors.description = "Description is required.";
+    if (!pageId) newErrors.pageId = "Page selection is required.";
+    if (!assignedApproverId)
+      newErrors.assignedApproverId = "Approver is required.";
+    if (!contentType) newErrors.contentType = "Content type is required.";
+
+    if (driveLink && !/^https:\/\/drive\.google\.com/.test(driveLink)) {
+      newErrors.driveLink = "Only Google Drive links are allowed.";
+    }
+
+    if (
+      !driveLink &&
+      files.length === 0 &&
+      (!editMode || postData.files?.length === deletedFileIds.length)
+    ) {
+      newErrors.fileOrDriveLink =
+        "At least one file or a valid Google Drive link is required.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const resetForm = () => {
     setTitle("");
     setDescription("");
@@ -97,9 +141,12 @@ const PostForm = ({
     setFiles([]);
     setDriveLink("");
     if (fileInputRef.current) fileInputRef.current.value = null;
+    setFileSizeError("");
   };
 
   const handleSubmit = () => {
+    if (!validateForm()) return;
+
     const payload = {
       title,
       description,
@@ -136,6 +183,7 @@ const PostForm = ({
               onChange={(e) => setTitle(e.target.value)}
               required
             />
+            {errors.title && <p className="error-text">{errors.title}</p>}
           </label>
 
           <label>
@@ -153,6 +201,7 @@ const PostForm = ({
                 </option>
               ))}
             </select>
+            {errors.pageId && <p className="error-text">{errors.pageId}</p>}
           </label>
 
           <label>
@@ -164,6 +213,9 @@ const PostForm = ({
               onChange={(e) => setDescription(e.target.value)}
               required
             />
+            {errors.description && (
+              <p className="error-text">{errors.description}</p>
+            )}
           </label>
           <label>
             Approver
@@ -180,6 +232,9 @@ const PostForm = ({
                 </option>
               ))}
             </select>
+            {errors.assignedApproverId && (
+              <p className="error-text">{errors.assignedApproverId}</p>
+            )}
           </label>
 
           <label>
@@ -194,6 +249,9 @@ const PostForm = ({
               <option value="reel">Reel</option>
               <option value="meme">Meme</option>
             </select>
+            {errors.contentType && (
+              <p className="error-text">{errors.contentType}</p>
+            )}
           </label>
 
           <label>
@@ -207,13 +265,25 @@ const PostForm = ({
           </label>
 
           <label>
-            Upload Files
+            Upload Files ( Max 100MB )
             <input
               type="file"
               multiple
               ref={fileInputRef}
               onChange={handleFilesChange}
             />
+            <p style={{ fontSize: "12px", color: "#555" }}>
+              Total size:{" "}
+              {(
+                files.reduce((acc, file) => acc + file.size, 0) /
+                (1024 * 1024)
+              ).toFixed(2)}{" "}
+              MB
+            </p>
+            {errors.fileOrDriveLink && (
+              <p className="error-text">{errors.fileOrDriveLink}</p>
+            )}
+            {fileSizeError && <p className="error-text">{fileSizeError}</p>}
           </label>
 
           <br></br>
