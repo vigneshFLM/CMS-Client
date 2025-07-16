@@ -19,7 +19,8 @@ const UserTable = ({
           <th>Mobile</th>
           <th>Designation</th>
           <th>Role</th>
-          <th>Manager</th>
+          {userRole === "super-admin" && <th>Manager</th>}
+
           <th>Access Count</th>
           {userRole === "super-admin" && <th>Actions</th>}
         </tr>
@@ -33,7 +34,7 @@ const UserTable = ({
             <td>{u.mobile || "-"}</td>
             <td>{u.designation || "-"}</td>
             <td>{u.role}</td>
-            <td>{u.manager_name || "-"}</td>
+            {userRole === "super-admin" && <td>{u.manager_name || "-"}</td>}
             <td>
               <div className="access-count-view">
                 {u.access_count}

@@ -26,28 +26,31 @@ const UserFilters = ({
         onChange={(e) => setSearch(e.target.value)}
         className="search-input"
       />
+      {userRole === "super-admin" && (
+        <>
+          <select
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+          >
+            <option value="">All Roles</option>
+            <option value="super-admin">Super Admin</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+          </select>
 
-      <select
-        value={roleFilter}
-        onChange={(e) => setRoleFilter(e.target.value)}
-      >
-        <option value="">All Roles</option>
-        <option value="super-admin">Super Admin</option>
-        <option value="admin">Admin</option>
-        <option value="user">User</option>
-      </select>
-
-      <select
-        value={managerFilter}
-        onChange={(e) => setManagerFilter(e.target.value)}
-      >
-        <option value="">All Managers</option>
-        {managers.map((manager) => (
-          <option key={manager.id} value={manager.name}>
-            {manager.name}
-          </option>
-        ))}
-      </select>
+          <select
+            value={managerFilter}
+            onChange={(e) => setManagerFilter(e.target.value)}
+          >
+            <option value="">All Managers</option>
+            {managers.map((manager) => (
+              <option key={manager.id} value={manager.name}>
+                {manager.name}
+              </option>
+            ))}
+          </select>
+        </>
+      )}
 
       <select
         value={accessFilter}
@@ -60,7 +63,6 @@ const UserFilters = ({
           </option>
         ))}
       </select>
-
       <div className="button-row">
         <button className="reset-button" onClick={resetFilters}>
           Reset Filters
