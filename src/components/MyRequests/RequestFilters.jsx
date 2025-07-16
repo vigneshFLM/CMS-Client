@@ -28,13 +28,12 @@ const RequestFilters = ({
       <option value="approved">Approved</option>
       <option value="rejected">Rejected</option>
     </select>
+    <button className="reset-button" onClick={resetFilters}>
+      Reset Filters
+    </button>
 
     <button className="add-button" onClick={onNewRequest}>
       New Request
-    </button>
-
-    <button className="reset-button" onClick={resetFilters}>
-      Reset Filters
     </button>
   </div>
 );
