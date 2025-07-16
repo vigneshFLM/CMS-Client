@@ -7,7 +7,7 @@ import RequestTable from "../components/MyRequests/RequestTable";
 import RequestView from "../components/MyRequests/RequestView";
 import Pagination from "../components/Pagination";
 import ConfirmationOverlay from "../components/ConfirmationOverlay"; // use your overlay
-import { IconLoader2 } from "@tabler/icons-react";
+import { IconLoader2, IconX } from "@tabler/icons-react";
 import "../styles/MyRequests.css";
 import { handleApiError } from "../utils/errorHandler";
 
@@ -25,6 +25,7 @@ const MyRequests = () => {
     reason: "",
     type: "",
   });
+  const [showRequestTypeOverlay, setShowRequestTypeOverlay] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,13 +74,18 @@ const MyRequests = () => {
     setCurrentPage(1);
   }, [search, statusFilter, requests]);
 
-  const handleNewRequest = async () => {
+  const handleNewRequest = () => {
+    setShowRequestTypeOverlay(true); // show type selection overlay
+  };
+
+  const handleRequestTypeSelection = async (type) => {
     try {
       const res = await requestApi.getResourceNames();
       setResourceOptions(res.data);
-      setRequestForm({ resource_id: "", reason: "" });
+      setRequestForm({ resource_id: "", reason: "", type }); // set the selected type
       setEditingRequestId(null);
-      setShowRequestForm(true);
+      setShowRequestForm(true); // open the form
+      setShowRequestTypeOverlay(false); // hide the overlay
     } catch (err) {
       handleApiError(err, showNotification, "Failed to load resources");
     }
@@ -202,6 +208,35 @@ const MyRequests = () => {
         data={selectedRequestData}
         onClose={() => setShowRequestView(false)}
       />
+
+      {showRequestTypeOverlay && (
+        <div className="resource-type-selection-overlay">
+          <div className="resource-type-selection-modal">
+            <button
+              type="button"
+              className="icon-close-button"
+              onClick={() => setShowRequestTypeOverlay(false)}
+              title="Close"
+            >
+              <IconX size={20} />
+            </button>
+
+            <h3>Select Resource Type</h3>
+            <button
+              className="add-button"
+              onClick={() => handleRequestTypeSelection("asset")}
+            >
+              Asset
+            </button>
+            <button
+              className="add-button"
+              onClick={() => handleRequestTypeSelection("cred")}
+            >
+              Credential
+            </button>
+          </div>
+        </div>
+      )}
 
       {showRequestForm && (
         <RequestForm
